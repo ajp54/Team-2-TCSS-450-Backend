@@ -55,13 +55,15 @@ router.post('/', (req, res) => {
         //We're storing salted hashes to make our application more secure
         //If you're interested as to what that is, and why we should use it
         //watch this youtube video: https://www.youtube.com/watch?v=8ZtInClXe1Q
+        let emailSalt = crypto.randomBytes(32).toString("hex")
+        let emailToken = getHash(email, emailSalt)
         let salt = crypto.randomBytes(32).toString("hex")
         let salted_hash = getHash(password, salt)
         
         //We're using placeholders ($1, $2, $3) in the SQL query string to avoid SQL Injection
         //If you want to read more: https://stackoverflow.com/a/8265319
-        let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Password, Salt) VALUES ($1, $2, $3, $4, $5, $6) RETURNING Email"
-        let values = [first, last, username, email, salted_hash, salt]
+        let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Password, Salt, Emailsalt) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING Email"
+        let values = [first, last, username, email, salted_hash, salt, emailToken]
         pool.query(theQuery, values)
             .then(result => {
                 //We successfully added the user, let the user know
@@ -69,7 +71,7 @@ router.post('/', (req, res) => {
                     success: true,
                     email: result.rows[0].email
                 })
-                sendEmail("uwnetid@uw.edu", email, "Welcome!", "<strong>Welcome to our app!</strong>");
+                sendEmail("johnofthesmithery@gmail.com", email, "Please confirm your email.", emailToken);
             })
             .catch((err) => {
                 //log the error

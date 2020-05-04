@@ -4,7 +4,9 @@ let pool = require("./sql_conn.js")
 //We use this create the SHA256 hash
 const crypto = require("crypto");
 
-function sendEmail(from, receiver, subj, message) {
+const nodemailer = require("nodemailer");
+
+function sendEmail(from, receiver, subj, emailToken) {
  //research nodemailer for sending email from node.
  // https://nodemailer.com/about/
  // https://www.w3schools.com/nodejs/nodejs_email.asp
@@ -13,7 +15,34 @@ function sendEmail(from, receiver, subj, message) {
  //similar to the DATABASE_URL and PHISH_DOT_NET_KEY (later section of the lab)
 
  //fake sending an email for now. Post a message to logs.
- console.log('Email sent: ' + message);
+ //console.log('Email sent: ' + message);
+
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    //type: 'Oauth2',
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
+  }
+});
+
+const confirmURL = "localhost:5000/verify/" + emailToken;
+
+var mailOptions = {
+  from: from,
+  to: receiver,
+  subject: subj,
+  text: 'Your email was used for registration to the Team 2 TCSS 450 project app. If this was not you please ignore this email, and the link that follows.\n',
+  html: "Please click this link to confirm your email: <a href=" + confirmURL + " Click to verify email.</a>",
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
 }
 
 /**
