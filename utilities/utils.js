@@ -26,14 +26,12 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-const confirmURL = "localhost:5000/verify/" + emailToken;
-
 var mailOptions = {
   from: from,
   to: receiver,
   subject: subj,
   text: 'Your email was used for registration to the Team 2 TCSS 450 project app. If this was not you please ignore this email, and the link that follows.\n',
-  html: "Please click this link to confirm your email: <a href=" + confirmURL + " Click to verify email.</a>",
+  html: '<p> Please click here to confirm your email: <a href="http://localhost:5000/verify?token=' + emailToken + '">here</a> Click to verify email.</p>'
 };
 
 transporter.sendMail(mailOptions, function(error, info){

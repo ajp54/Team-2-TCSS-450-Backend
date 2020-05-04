@@ -49,7 +49,6 @@ router.post('/', (req, res) => {
     var password = req.body.password
     //Verify that the caller supplied all the parameters
     //In js, empty strings or null values evaluate to false
-
     if(first && last && username && email && password) {
 
         //We're storing salted hashes to make our application more secure
@@ -59,10 +58,10 @@ router.post('/', (req, res) => {
         let emailToken = getHash(email, emailSalt)
         let salt = crypto.randomBytes(32).toString("hex")
         let salted_hash = getHash(password, salt)
-        
+
         //We're using placeholders ($1, $2, $3) in the SQL query string to avoid SQL Injection
         //If you want to read more: https://stackoverflow.com/a/8265319
-        let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Password, Salt, Emailsalt) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING Email"
+        let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Password, Salt, Emailtoken) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING Email"
         let values = [first, last, username, email, salted_hash, salt, emailToken]
         pool.query(theQuery, values)
             .then(result => {

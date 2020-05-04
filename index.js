@@ -32,12 +32,13 @@ app.use('/demosql', require('./routes/demosql.js'))
 
 app.use('/phish', middleware.checkToken, require('./routes/phish.js')) 
 
-app.get('/verify/:token', (request, response) => {
-  var token = req.params.token;
-  let theQuery = "UPDATE MEMBERS(Verification) VALUES($1) WHERE Emailsalt=" + token
-  let values = [1];
+app.get('/verify', (request, response) => {
+  if(request.body.token) {
+    var token = req.params.token;
+    let theQuery = "UPDATE MEMBERS(Verification) VALUES($1) WHERE Emailtoken=" + token
+    let values = [1];
 
-  pool.query(theQuery, values)
+    pool.query(theQuery, values)
             .then(result => {
                 //We successfully update the user, let the user know
                 res.status(201).send({
@@ -62,6 +63,8 @@ app.get('/verify/:token', (request, response) => {
                     })
                 }
             })
+  }
+  
   
   console.log('Ah, made it back did ya? Impressive... really.');
 
