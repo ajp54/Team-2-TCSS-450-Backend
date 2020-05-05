@@ -32,44 +32,7 @@ app.use('/demosql', require('./routes/demosql.js'))
 
 app.use('/phish', middleware.checkToken, require('./routes/phish.js')) 
 
-app.get('/verify', (request, response) => {
-  if(request.body.token) {
-    var token = req.params.token;
-    let theQuery = "UPDATE MEMBERS(Verification) VALUES($1) WHERE Emailtoken=" + token
-    let values = [1];
-
-    pool.query(theQuery, values)
-            .then(result => {
-                //We successfully update the user, let the user know
-                res.status(201).send({
-                    success: true,
-                    verificaton: result.rows[0].verification
-                })
-            })
-            .catch((err) => {
-                //log the error
-                //console.log(err)
-                if (err.constraint == "members_username_key") {
-                    res.status(400).send({
-                        message: "Username exists"
-                    })
-                } else if (err.constraint == "members_email_key") {
-                    res.status(400).send({
-                        message: "Email exists"
-                    })
-                } else {
-                    res.status(400).send({
-                        message: err.detail
-                    })
-                }
-            })
-  }
-  
-  
-  console.log('Ah, made it back did ya? Impressive... really.');
-
-})
-   
+app.use('/verify', require('./routes/verify.js'))
    
 
 /*

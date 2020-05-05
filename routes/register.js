@@ -70,7 +70,7 @@ router.post('/', (req, res) => {
                     success: true,
                     email: result.rows[0].email
                 })
-                sendEmail("johnofthesmithery@gmail.com", email, "Please confirm your email.", emailToken);
+                sendEmail("ShootTheBreeze@gmail.com", email, "Please confirm your email.", emailToken);
             })
             .catch((err) => {
                 //log the error
