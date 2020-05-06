@@ -3,12 +3,9 @@ const express = require('express')
 //Create a new instance of express
 const app = express()
 
-//Access the connection to Heroku Database
-let pool = require('./utilities/utils').pool
-
 let middleware = require('./utilities/middleware')
 
-const bodyParser = require("body-parser");
+const bodyParser = require("body-parser")
 //This allows parsing of the body of POST requests, that are encoded in JSON
 app.use(bodyParser.json())
 
