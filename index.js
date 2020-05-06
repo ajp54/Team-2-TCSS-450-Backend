@@ -3,9 +3,6 @@ const express = require('express')
 //Create a new instance of express
 const app = express()
 
-//Access the connection to Heroku Database
-let pool = require('./utilities/utils').pool
-
 let middleware = require('./utilities/middleware')
 
 const bodyParser = require("body-parser");
