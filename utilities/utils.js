@@ -31,7 +31,7 @@ var mailOptions = {
   to: receiver,
   subject: subj,
   text: 'Your email was used for registration to the Team 2 TCSS 450 project app. If this was not you please ignore this email, and the link that follows.\n',
-  html: '<p> Please click here to confirm your email: <a href="http://team-2-tcss-450-backend.herokuapp.com/verify?token=' + emailToken + '">here</a> Click to verify email.</p>'
+  html: '<p> Please click here to confirm your email: <a href="https://team-2-tcss-450-backend.herokuapp.com/verify?token=' + emailToken + '">here</a> Click to verify email.</p>'
 };
 
 transporter.sendMail(mailOptions, function(error, info){
