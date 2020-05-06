@@ -92,6 +92,9 @@ router.post('/', (req, res) => {
                     res.status(400).send({
                         message: err.detail
                     })
+                    res.send({
+                        message: "asdfasdf"
+                    })
                 }
             })
     } else {
