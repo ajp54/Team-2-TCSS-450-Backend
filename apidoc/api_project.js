@@ -1,14 +1,10 @@
 define({
-  "name": "Lab 4",
+  "name": "Shoot The Breeze",
   "version": "0.1.0",
-  "description": "The Lab 4 API Documentation",
-  "title": "Lab 4 API Doc",
-  "url": "https://cfb3-lab4-backend-2020sp.herokuapp.com",
+  "description": "Shoot The Breeze Documentation",
+  "title": "Shoot The Breeze Doc",
+  "url": "https://team-2-tcss-450-backend.herokuapp.com",
   "order": [
-    "Hello",
-    "Params",
-    "Wait",
-    "DemoSql",
     "Auth",
     "Phish"
   ],
