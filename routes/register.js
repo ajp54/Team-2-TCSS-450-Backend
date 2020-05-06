@@ -68,7 +68,7 @@ router.post('/', (req, res) => {
                 //We successfully added the user, let the user know
                 res.status(201).send({
                     success: true,
-                    email: result.rows[0].email
+                    //email: result.rows[0].email
                 })
                 sendEmail("ShootTheBreeze@gmail.com", email, "Please confirm your email.", emailToken);
             })
