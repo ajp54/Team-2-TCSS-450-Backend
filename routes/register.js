@@ -61,7 +61,7 @@ router.post('/', (req, res) => {
 
         //We're using placeholders ($1, $2, $3) in the SQL query string to avoid SQL Injection
         //If you want to read more: https://stackoverflow.com/a/8265319
-        let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Password, Salt, Emailtoken) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING Email"
+        let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Password, Salt, Emailtoken) VALUES ($1, $2, $3, $4, $5, $6, $7)"
         let values = [first, last, username, email, salted_hash, salt, emailToken]
         console.log('test')
         pool.query(theQuery, values)
