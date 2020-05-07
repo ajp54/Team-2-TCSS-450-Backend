@@ -18,11 +18,14 @@ function sendEmail(from, receiver, subj, emailToken) {
  //console.log('Email sent: ' + message);
 
 var transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: "Gmail",
   auth: {
     //type: 'Oauth2',
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_PASS
+  }
+  tls: {
+    rejectUnauthorized:false
   }
 });
 
