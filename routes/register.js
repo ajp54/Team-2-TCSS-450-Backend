@@ -60,16 +60,16 @@ router.post('/', (req, res) => {
             res.status(400).send({
                 message: "Invalid first name information"
             })
-        } else if(email.length <= 2 || email.contains(" ") || !email.contains("@")) {
+        } else if(email.length <= 2 || email.includes(" ") || !email.includes("@")) {
             res.status(400).send({
                 message: "Invalid email registration information"
             })
         } else if(password.length <= 7 || 
-                  password.match("[@#$%&*!?]").length > 0 || 
-                  !password.includes(" ") ||
-                  password.match("[1234567890]").length > 0 ||
-                  !password.equals(password.toLowerCase()) ||
-                  !password.equals(password.toUpperCase())) {
+                  password.match("[@#$%&*!?]") == null || 
+                  password.includes(" ") ||
+                  password.match("[0-9]") == null ||
+                  password.match("[a-z]") == null ||
+                  password.match("[A-Z]") == null) {
             res.status(400).send({
                 message: "Invalid password registration information"
             })
@@ -91,7 +91,7 @@ router.post('/', (req, res) => {
                     //We successfully added the user, let the user know
                     res.status(201).send({
                         success: true,
-                        email: result.rows[0].email
+                        //email: result.rows[0].email
                     })
                     sendEmail("shootthebreeze.verify@gmail.com", email, "Please confirm your email.", emailToken)
                 })
