@@ -30,6 +30,12 @@ app.use('/demosql', require('./routes/demosql.js'))
 app.use('/phish', middleware.checkToken, require('./routes/phish.js')) 
 
 app.use('/verify', require('./routes/verify.js'))
+
+app.use('/messages', middleware.checkToken, require('./routes/messages.js'))
+
+app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
+
+app.use('/auth', middleware.checkToken, require('./routes/pushyregister.js'))
    
 
 /*
