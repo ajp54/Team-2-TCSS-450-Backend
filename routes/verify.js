@@ -36,17 +36,15 @@ router.get("/", (request, response) => {
               })
               .catch((err) => {
                   //log the error
-                  console.log(err)
+                  //console.log(err)
                 response.status(400).send({
                     message: err.detail
                 })
               })
     }
-    
-    
-    // response.send({
-    //   message: "Email has been Validated, and you can now login."
-    // })
+    response.send({
+      message: "Email has been Validated, and you can now login."
+    })
   
   })
 
