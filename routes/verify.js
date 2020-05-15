@@ -31,8 +31,7 @@ router.get("/", (request, response) => {
               .then(result => {
                   //We successfully update the user, let the user know
                   response.status(201).send({
-                      
-                      //verification: result.rows[0].verification
+                      verification: result.rows[0].verification
                   })
               })
               .catch((err) => {
