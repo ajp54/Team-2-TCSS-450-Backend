@@ -5,7 +5,7 @@ const app = express()
 
 let middleware = require('./utilities/middleware')
 
-const bodyParser = require("body-parser")
+const bodyParser = require("body-parser");
 //This allows parsing of the body of POST requests, that are encoded in JSON
 app.use(bodyParser.json())
 
@@ -13,9 +13,7 @@ app.use('/auth', require('./routes/login.js'))
 
 app.use('/auth', require('./routes/register.js')) 
 
-app.use('/hello', require('./routes/hello.js')) 
-
-app.use('/para', require('./routes/params.js')) 
+app.use('/verify', require('./routes/verify.js'))
 
 app.get("/wait", (request, response) => {
 setTimeout(() => {
@@ -24,12 +22,6 @@ message: "Thanks for waiting"
 });
 }, 5000)
 }) 
-
-app.use('/demosql', require('./routes/demosql.js')) 
-
-app.use('/phish', middleware.checkToken, require('./routes/phish.js')) 
-
-app.use('/verify', require('./routes/verify.js'))
 
 app.use('/messages', middleware.checkToken, require('./routes/messages.js'))
 

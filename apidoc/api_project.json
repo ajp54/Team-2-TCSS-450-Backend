@@ -6,7 +6,8 @@
   "url": "https://team-2-tcss-450-backend.herokuapp.com",
   "order": [
     "Auth",
-    "Phish"
+    "Verify",
+    "Wait"
   ],
   "sampleUrl": false,
   "defaultVersion": "0.0.0",
