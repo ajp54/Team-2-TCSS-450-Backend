@@ -17,7 +17,7 @@ var router = express.Router()
  */
 router.get("/weather", (request, response) => {
 
-    // hardcoded zip for UWT
+    // hardcoded for UWT
     let url = `http://api.worldweatheronline.com/premium/v1/weather.ashx?key=dc96b2428dc140f09a710254201405&q=98402&format=json&num_of_days=5`
 
     request(url, function(error, body) {
