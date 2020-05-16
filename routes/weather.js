@@ -18,18 +18,17 @@ var router = express.Router()
 router.get("/", (request, response) => {
 
     // hardcoded for UWT
-    let url = "http://api.worldweatheronline.com/premium/v1/weather.ashx?key=dc96b2428dc140f09a710254201405&q=98402&format=json&num_of_days=5"
+    let url = `http://api.worldweatheronline.com/premium/v1/weather.ashx?key=${API_KEY}&q=98402&format=json&num_of_days=5`
 
-    request(url, function(error, body) {
-        if (error) {
-            response.send(error)
-        } else {
-            var n = body.indexOf("{")
-            var nakedBody = body.substring(n-1)
-
-            response.send(nakedBody)
-        }
-    })
+    response.redirect(url)
+    // request(url, function(error, response) {
+    //     console.log("MADE IT TO REQUEST")
+    //     if (error) {
+    //         response.send(error)
+    //     } else {
+    //         response.send(response)
+    //     }
+    // })
 })
 
 module.exports = router
