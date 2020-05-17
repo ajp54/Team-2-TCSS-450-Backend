@@ -16,8 +16,8 @@ let config = {
 }
 
 /**
- * @api {post} /verify Request to verify the user
- * @apiName PostVerify
+ * @api {get} /verify Request to verify the user
+ * @apiName GetVerify
  * @apiGroup Verify
  * 
  * @apiParam {String} a token to identify the user
@@ -26,7 +26,7 @@ let config = {
  * @apiSuccess (Success 201) {String} verification the verification number of the user
  * 
  */ 
-router.post("/", (request, response) => {
+router.get("/", (request, response) => {
     if(request.query.token != null) {
       response.send(jwt.verify(request.query.token, config.secret))
       try {
