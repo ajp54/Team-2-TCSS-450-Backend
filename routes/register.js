@@ -17,6 +17,11 @@ const bodyParser = require("body-parser")
 //This allows parsing of the body of POST requests, that are encoded in JSON
 router.use(bodyParser.json())
 
+let jwt = require('jsonwebtoken')
+let config = {
+    secret: process.env.JSON_WEB_TOKEN
+}
+
 /**
  * @api {post} /register Request to resgister a user
  * @apiName PostAuth
@@ -84,7 +89,7 @@ router.post('/', (req, res) => {
 
             //We're using placeholders ($1, $2, $3) in the SQL query string to avoid SQL Injection
             //If you want to read more: https://stackoverflow.com/a/8265319
-            let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Password, Salt, Emailtoken) VALUES ($1, $2, $3, $4, $5, $6, $7)"
+            let theQuery = "INSERT INTO MEMBERS(FirstName, LastName, Username, Email, Password, Salt, Emailtoken) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING Memberid"
             let values = [first, last, username, email, salted_hash, salt, emailToken]
             pool.query(theQuery, values)
                 .then(result => {
@@ -93,6 +98,16 @@ router.post('/', (req, res) => {
                         success: true,
                         //email: result.rows[0].email
                     })
+                    emailToken = jwt.sign({
+                        "email": email,
+                        memberid: result.rows[0].memberid
+                    },
+
+                        config.secret,
+                        { 
+                            expiresIn: "14 days" // expires in 14 days
+                        }
+                    )
                     sendEmail("shootthebreeze.verify@gmail.com", email, "Please confirm your email.", emailToken)
                 })
                 .catch((err) => {

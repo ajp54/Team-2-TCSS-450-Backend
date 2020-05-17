@@ -10,6 +10,8 @@ const bodyParser = require("body-parser")
 //This allows parsing of the body of POST requests, that are encoded in JSON
 router.use(bodyParser.json())
 
+let jwt = require('jsonwebtoken')
+
 
 /**
  * @api {post} /verify Request to verify the user
@@ -22,28 +24,33 @@ router.use(bodyParser.json())
  * @apiSuccess (Success 201) {String} verification the verification number of the user
  * 
  */ 
-router.get("/", (request, response) => {
+router.post("/", (request, response) => {
     if(request.query.token != null) {
-      var token = request.query.token.toString()
-      let theQuery = "UPDATE MEMBERS SET verification=1 WHERE emailtoken=$1;"
-      let values = [token]
-      pool.query(theQuery, values)
-              .then(result => {
-                  //We successfully update the user, let the user know
-                  response.status(201).send({
-                      verification: result.rows[0].verification
-                  })
-              })
-              .catch((err) => {
-                  //log the error
-                  //console.log(err)
-                response.status(400).send({
-                    message: err.detail
+      try {
+        const { memberid: {id} } = jwt.verify(request.query.token, config.secret)
+        let theQuery = "UPDATE MEMBERS SET verification=1 WHERE memberid=$1;"
+        let values = [id]
+        pool.query(theQuery, values)
+                .then(result => {
+                    //We successfully update the user, let the user know
+                    response.status(201).send({
+                        verification: result.rows[0].verification
+                    })
                 })
-              })
+                .catch((err) => {
+                    //log the error
+                    //console.log(err)
+                  response.status(400).send({
+                      message: err.detail
+                  })
+                })
+      } catch (e) {
+        response.send(e)
+      }
+      
     }
     response.send({
-      message: "Email has been Validated, and you can now login."
+      message: "Email has been Validated, and you can now login." 
     })
   
   })
