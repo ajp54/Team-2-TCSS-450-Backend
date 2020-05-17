@@ -11,7 +11,9 @@ const bodyParser = require("body-parser")
 router.use(bodyParser.json())
 
 let jwt = require('jsonwebtoken')
-
+let config = {
+  secret: process.env.JSON_WEB_TOKEN
+}
 
 /**
  * @api {post} /verify Request to verify the user
