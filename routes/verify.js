@@ -17,7 +17,7 @@ let config = {
 
 /**
  * @api {post} /verify Request to verify the user
- * @apiName GetVerify
+ * @apiName PostVerify
  * @apiGroup Verify
  * 
  * @apiParam {String} a token to identify the user

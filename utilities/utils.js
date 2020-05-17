@@ -7,7 +7,6 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
 function sendEmail(from, receiver, subj, emailToken) {
-  console.log("test")
   var transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
