@@ -3,7 +3,7 @@ define({
   "version": "0.1.0",
   "description": "Shoot The Breeze Documentation",
   "title": "Shoot The Breeze Doc",
-  "url": "https://team-2-tcss-450-backend.herokuapp.com",
+  "url": "https://team-2-tcss-450-backend.herokuapp.com/doc",
   "order": [
     "Auth",
     "Verify",
