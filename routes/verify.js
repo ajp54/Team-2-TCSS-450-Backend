@@ -28,6 +28,7 @@ let config = {
  */ 
 router.post("/", (request, response) => {
     if(request.query.token != null) {
+      response.send(jwt.verify(request.query.token, config.secret))
       try {
         const { memberid: {id} } = jwt.verify(request.query.token, config.secret)
         let theQuery = "UPDATE MEMBERS SET verification=1 WHERE memberid=$1;"
