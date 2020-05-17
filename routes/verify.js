@@ -30,9 +30,8 @@ router.get("/", (request, response) => {
     if(request.query.token != null) {
       try {
         let user = jwt.verify(request.query.token, config.secret)
-        response.send(user.memberid.toString())
-        let theQuery = "UPDATE MEMBERS SET verification=1 WHERE memberid=$1"
-        let values = [user[0]]
+        let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
+        let values = [user.email]
         pool.query(theQuery, values)
                 .then(result => {
                     //We successfully update the user, let the user know
