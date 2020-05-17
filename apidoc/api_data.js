@@ -192,5 +192,70 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "routes/register.js",
     "groupTitle": "Auth"
+  },
+  {
+    "type": "get",
+    "url": "/verify",
+    "title": "Request to verify a user",
+    "name": "GetVerify",
+    "group": "Verify",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>JSON Web Token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true when the user verification is updated</p>"
+          },
+          {
+            "group": "Success 201",
+            "type": "String",
+            "optional": false,
+            "field": "verification number",
+            "description": "<p>the verification number of the user</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400: Missing Parameters": [
+          {
+            "group": "400: Missing Parameters",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>&quot;Missing required information&quot;</p>"
+          }
+        ],
+        "400: SQL Error": [
+          {
+            "group":"400: SQL Error",
+            "type":"String",
+            "optional":false,
+            "field": "message",
+            "description":"<p>the reported SQL error details</p>"
+          }
+        ]
+      }
+    },
+    "version":"0.0.0",
+    "filename": "routes/verify.js",
+    "groupTitle": "Auth"
   }
 ] });
