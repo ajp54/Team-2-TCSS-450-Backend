@@ -10,7 +10,7 @@ var router = express.Router()
 
 /**
  * @api {get} /weather Request to get weather information
- * @apiName WorldWeatherOnline
+ * @apiName GetWeather
  * 
  * @apiHeader {String} a request for specified weather info
  * 
