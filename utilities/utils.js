@@ -7,40 +7,32 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
 function sendEmail(from, receiver, subj, emailToken) {
- //research nodemailer for sending email from node.
- // https://nodemailer.com/about/
- // https://www.w3schools.com/nodejs/nodejs_email.asp
- //create a burner gmail account
- //make sure you add the password to the environmental variables
- //similar to the DATABASE_URL and PHISH_DOT_NET_KEY (later section of the lab)
+  var transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      //type: 'Oauth2',
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS
+    },
+  });
 
- //fake sending an email for now. Post a message to logs.
- //console.log('Email sent: ' + message);
+  var mailOptions = {
+    from: from,
+    to: receiver,
+    subject: subj,
+    text: 'Your email was used for registration to the Team 2 TCSS 450 project app. If this was not you please ignore this email, and the link that follows.\n',
+    html: '<p> Please click here to confirm your email: <a href="https://team-2-tcss-450-backend.herokuapp.com/verify?token=' + emailToken + '">here</a> Click to verify email.</p>'
+  };
 
-var transporter = nodemailer.createTransport({
-  service: "Gmail",
-  auth: {
-    //type: 'Oauth2',
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
-  }
-});
-
-var mailOptions = {
-  from: from,
-  to: receiver,
-  subject: subj,
-  text: 'Your email was used for registration to the Team 2 TCSS 450 project app. If this was not you please ignore this email, and the link that follows.\n',
-  html: '<p> Please click here to confirm your email: <a href="https://team-2-tcss-450-backend.herokuapp.com/verify?token=' + emailToken + '">here</a> Click to verify email.</p>'
-};
-
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-});
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
 }
 
 /**

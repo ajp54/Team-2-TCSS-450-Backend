@@ -1,15 +1,12 @@
 {
-    "name": "Lab 4",
+    "name": "Shoot the Breeze API",
     "version": "0.1.0",
-    "description": "The Lab 4 API Documentation",
+    "description": "TCSS450 Shoot the Breeze Application Project",
     "title": "Lab 4 API Doc",
-    "url" : "https://team-2-tcss-450-backend.herokuapp.com",
+    "url" : "https://team-2-tcss-450-backend.herokuapp.com/doc",
     "order": [
-      "Hello",
-      "Params",
-      "Wait",
-      "DemoSql",
       "Auth",
-      "Phish"
+      "Verify",
+      "Wait"
     ]
   }
