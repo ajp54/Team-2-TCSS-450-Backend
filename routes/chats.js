@@ -281,7 +281,7 @@ router.put("/:chatId?/", (request, response, next) => {
  */ 
 router.get("/:memberId?", (request, response, next) => {
     //validate on missing or invalid (type) parameters
-    if (!request.params.chatId) {
+    if (!request.params.memberId) {
         response.status(400).send({
             message: "Missing required information"
         })
