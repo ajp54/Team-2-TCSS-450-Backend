@@ -24,8 +24,7 @@ let config = {
  * 
  * @apiParam {String} a token to identify the user
  * 
- * @apiSuccess (Success 201) {boolean} success true when the user verification is updated
- * @apiSuccess (Success 201) {String} verification the verification number of the user
+ * @apiSuccess (Success 201) {boolean} success true when the user password is set to a temporary value
  * 
  */ 
 router.get("/", (request, response) => {
