@@ -10,9 +10,13 @@ var router = express.Router()
 
 /**
  * @api {get} /weather Request to get weather information
- * @apiName WorldWeatherOnline
+ * @apiName GetWeather
  * 
  * @apiHeader {String} a request for specified weather info
+ * 
+ * @apiParam {String} url the url to poll the weather API
+ * 
+ * @apiSuccess (Success 201) {boolean} success true when the weather information is returned
  * 
  */
 router.get("/", (request, response) => {
