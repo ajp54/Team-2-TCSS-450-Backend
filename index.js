@@ -30,6 +30,14 @@ app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
 app.use('/auth', middleware.checkToken, require('./routes/pushyregister.js'))
 
 app.use('/weather', require('./routes/weather.js'))
+
+// app.use('/resend', require('.routes/resend.js'))
+
+// app.use('/change_pass', middleware.checkToken, require('.routes/change_pass.js'))
+
+// app.use('/forgot', require('.routes/forgot.js'))
+
+// app.use('/temp_pass', require('.routes/temp_pass.js'))
    
 
 /*

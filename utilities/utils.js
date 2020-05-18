@@ -22,7 +22,7 @@ function sendEmail(from, receiver, subj, emailToken) {
     from: from,
     to: receiver,
     subject: subj,
-    text: 'Your email was used for registration to the Team 2 TCSS 450 project app. If this was not you please ignore this email, and the link that follows.\n',
+    text: 'Your email was used for registration to Shoot the Breeze. If this was not you please ignore this email, and the link that follows.\n',
     html: '<p> Please click here to confirm your email: <a href="https://team-2-tcss-450-backend.herokuapp.com/verify?token=' + emailToken + '">here</a> Click to verify email.</p>'
   };
 
@@ -34,6 +34,35 @@ function sendEmail(from, receiver, subj, emailToken) {
     }
   });
 }
+
+// function sendPassword(from, receiver, subj, emailToken) {
+//   var transporter = nodemailer.createTransport({
+//     host: 'smtp.gmail.com',
+//     port: 465,
+//     secure: true,
+//     auth: {
+//       //type: 'Oauth2',
+//       user: process.env.GMAIL_USER,
+//       pass: process.env.GMAIL_PASS
+//     },
+//   });
+
+//   var mailOptions = {
+//     from: from,
+//     to: receiver,
+//     subject: subj,
+//     text: 'A request was made through Shoot the Breeze to recover your password, if this was not you please ignore and/or delete this email.\n',
+//     html: '<p> Please click here to get a new temporary email to Shoot the Breeze: <a href="https://team-2-tcss-450-backend.herokuapp.com/temp_pass?token=' + emailToken + '">here</a> Click to get a new temporary password.</p>'
+//   };
+
+//   transporter.sendMail(mailOptions, function(error, info){
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       console.log('Email sent: ' + info.response);
+//     }
+//   });
+// }
 
 /**
  * Method to get a salted hash.
@@ -47,5 +76,5 @@ function getHash(pw, salt) {
 
 let messaging = require('./pushy_utilities.js')
 module.exports = {
- pool, getHash, sendEmail, messaging
-}; 
+ pool, getHash, sendEmail, sendPassword, messaging
+};
