@@ -82,8 +82,6 @@ router.post('/', (req, res) => {
             //We're storing salted hashes to make our application more secure
             //If you're interested as to what that is, and why we should use it
             //watch this youtube video: https://www.youtube.com/watch?v=8ZtInClXe1Q
-            let emailSalt = crypto.randomBytes(32).toString("hex")
-            let emailToken = getHash(email, emailSalt)
             let salt = crypto.randomBytes(32).toString("hex")
             let salted_hash = getHash(password, salt)
 
@@ -98,9 +96,9 @@ router.post('/', (req, res) => {
                         success: true,
                         //email: result.rows[0].email
                     })
-                    emailToken = jwt.sign({
+                    let emailToken = jwt.sign({
                         "email": email,
-                        memberid: result.rows[0].memberid
+                        memberid: result.rows[0].memberid                   
                     },
 
                         config.secret,
