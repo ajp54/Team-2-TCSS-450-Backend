@@ -204,59 +204,59 @@ router.put("/:chatId?/", (request, response, next) => {
  * 
  * @apiUse JSONError
  */ 
-router.get("/:chatId?", (request, response, next) => {
-    //validate on missing or invalid (type) parameters
-    if (!request.params.chatId) {
-        response.status(400).send({
-            message: "Missing required information"
-        })
-    } else if (isNaN(request.params.chatId)) {
-        response.status(400).send({
-            message: "Malformed parameter. chatId must be a number"
-        })
-    } else {
-        next()
-    }
-},  (request, response, next) => {
-    //validate chat id exists
-    let query = 'SELECT * FROM CHATS WHERE ChatId=$1'
-    let values = [request.params.chatId]
+// router.get("/:chatId?", (request, response, next) => {
+//     //validate on missing or invalid (type) parameters
+//     if (!request.params.chatId) {
+//         response.status(400).send({
+//             message: "Missing required information"
+//         })
+//     } else if (isNaN(request.params.chatId)) {
+//         response.status(400).send({
+//             message: "Malformed parameter. chatId must be a number"
+//         })
+//     } else {
+//         next()
+//     }
+// },  (request, response, next) => {
+//     //validate chat id exists
+//     let query = 'SELECT * FROM CHATS WHERE ChatId=$1'
+//     let values = [request.params.chatId]
 
-    pool.query(query, values)
-        .then(result => {
-            if (result.rowCount == 0) {
-                response.status(404).send({
-                    message: "Chat ID not found"
-                })
-            } else {
-                next()
-            }
-        }).catch(error => {
-            response.status(400).send({
-                message: "SQL Error",
-                error: error
-            })
-        })
-    }, (request, response) => {
-        //REtrive the members
-        let query = `SELECT Members.Email 
-                    FROM ChatMembers
-                    INNER JOIN Members ON ChatMembers.MemberId=Members.MemberId
-                    WHERE ChatId=$1`
-        let values = [request.params.chatId]
-        pool.query(query, values)
-            .then(result => {
-                response.send({
-                    rowCount : result.rowCount,
-                    rows: result.rows
-                })
-            }).catch(err => {
-                response.status(400).send({
-                    message: "SQL Error",
-                    error: err
-                })
-            })
-});
+//     pool.query(query, values)
+//         .then(result => {
+//             if (result.rowCount == 0) {
+//                 response.status(404).send({
+//                     message: "Chat ID not found"
+//                 })
+//             } else {
+//                 next()
+//             }
+//         }).catch(error => {
+//             response.status(400).send({
+//                 message: "SQL Error",
+//                 error: error
+//             })
+//         })
+//     }, (request, response) => {
+//         //REtrive the members
+//         let query = `SELECT Members.Email 
+//                     FROM ChatMembers
+//                     INNER JOIN Members ON ChatMembers.MemberId=Members.MemberId
+//                     WHERE ChatId=$1`
+//         let values = [request.params.chatId]
+//         pool.query(query, values)
+//             .then(result => {
+//                 response.send({
+//                     rowCount : result.rowCount,
+//                     rows: result.rows
+//                 })
+//             }).catch(err => {
+//                 response.status(400).send({
+//                     message: "SQL Error",
+//                     error: err
+//                 })
+//             })
+// });
 
 /**
  * @api {get} /chats/:chatId? Request to get the chat rooms a user is part of
@@ -268,7 +268,7 @@ router.get("/:chatId?", (request, response, next) => {
  * @apiParam {Number} memberId the member to look up. 
  * 
  * @apiSuccess {Number} rowCount the number of chat IDs returned
- * @apiSuccess {Object[]} members List of chat IDs the member is in
+ * @apiSuccess {Object[]} chatIds List of chat IDs the member is in
  * @apiSuccess {String} messages.email The email for the member in the chat
  * 
  * @apiError (404: ChatId Not Found) {String} message "Member ID Not Found"
