@@ -708,5 +708,41 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "routes/chats.js",
     "groupTitle": "Chats"
+  },
+  {
+    "type": "get",
+    "url": "/weather",
+    "title": "Request to get weather info",
+    "name": "GetWeather",
+    "group": "Weather",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "URL",
+            "description": "<p>the url to poll the weather API</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true when weather info is returned</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/weather.js",
+    "groupTitle": "Weather"
   }
 ] });
