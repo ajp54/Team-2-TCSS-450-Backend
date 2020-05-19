@@ -30,8 +30,10 @@ let config = {
 router.get("/", (request, response) => {
     if(request.query.token != null) {
       try {
+
         var password = crypto.randomBytes(10).toString("hex")
         password = password.concat("$Sb9")
+        response.send(password)
 
         let salt = crypto.randomBytes(32).toString("hex")
         let salted_hash = getHash(password, salt)
@@ -39,7 +41,6 @@ router.get("/", (request, response) => {
         let user = jwt.verify(request.query.token, config.secret)
         let theQuery = "UPDATE MEMBERS SET salted_hash=$1, salt=$2 WHERE email=$3"
         let values = [salted_hash, salt, user.email]
-        response.send(password)
         pool.query(theQuery, values)
                 .then(result => {
                     //We successfully update the user, let the user know
