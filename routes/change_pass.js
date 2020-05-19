@@ -62,8 +62,8 @@ router.post('/', (req, res) => {
             let salted_hash = getHash(newpassword, salt)
 
             let email = req.decoded.email
-            res.send("hello")
-            let theQuery = "UPDATE MEMBERS SET salted_hash=$1, salt=$2 WHERE email=$3"
+
+            let theQuery = "UPDATE MEMBERS SET password=$1, salt=$2 WHERE email=$3"
             let values = [salted_hash, salt, email]
             pool.query(theQuery, values)
                 .then(result => {
