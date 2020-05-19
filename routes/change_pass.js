@@ -41,13 +41,13 @@ router.use(bodyParser.json())
  */ 
 router.post('/', (req, res) => {
     res.type("application/json")
-    res.send("hello")
 
     //Retrieve data from query params
     var newpassword = req.query.newpw
     //Verify that the caller supplied all the parameters
     //In js, empty strings or null values evaluate to false
     if(newpassword) {
+        res.send("hello")
         if(newpassword.length <= 7 ||
                   newpassword.match("[@#$%&*!?]") == null || 
                   newpassword.includes(" ") ||
