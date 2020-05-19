@@ -25,7 +25,7 @@ message: "Thanks for waiting"
 
 app.use('/messages', middleware.checkToken, require('./routes/messages.js'))
 
-app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
+//app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
 
 app.use('/auth', middleware.checkToken, require('./routes/pushyregister.js'))
 
