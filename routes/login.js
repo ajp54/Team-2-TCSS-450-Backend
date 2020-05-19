@@ -71,7 +71,7 @@ router.get("/", (request, response) => {
                     //credentials match. get a new JWT
                     let token = jwt.sign({
                         "email": email,
-                        memberid: result.rows[0].memberid
+                        "memberid": result.rows[0].memberid
                     },
 
                         config.secret,
@@ -81,7 +81,7 @@ router.get("/", (request, response) => {
                     //package and send the results
                     response.json({
                         success: true,
-                        message: "Authentication successful! memberID: " + result.rows[0].password,
+                        message: "Authentication successful! memberID: " + result.rows[0].memberid,
                         token: token
                     })
                     
