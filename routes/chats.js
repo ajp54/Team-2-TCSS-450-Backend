@@ -361,15 +361,18 @@ router.get("/", (request, response, next) => {
     if(request.query.token != null) {
         try {
           let user = jwt.verify(request.query.token, config.secret)
-          let theQuery = `SELECT ChatMembers.ChatId
+          response.send(user.success)
+          //response.send(jwt.verify(request.query.token, config.secret))
+          let theQuery = `SELECT ChatId
                           FROM ChatMembers
                           WHERE MemberId=$1`
           let values = [user.memberid]
           pool.query(theQuery, values)
                   .then(result => {
-                      //We successfully update the user, let the user know
+                      //We got the chatIds, now send them to the user.
                       response.status(201).send({
-                          memberId: result.chatId
+                        //   change chatid to a list
+                          chatId: result.rows
                       })
                   })
                   .catch((err) => {

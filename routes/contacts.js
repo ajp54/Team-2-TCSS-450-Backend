@@ -35,9 +35,9 @@ router.get("/", (request, response, next) => {
     if(request.query.token != null) {
         try {
           let user = jwt.verify(request.query.token, config.secret)
-          let theQuery = `SELECT ChatMembers.ChatId
-                          FROM ChatMembers
-                          WHERE MemberId=$1`
+          let theQuery = `SELECT Contacts.MemberID_B
+                          FROM Contacts
+                          WHERE MemberID_A=$1`
           let values = [user.memberid]
           pool.query(theQuery, values)
                   .then(result => {
