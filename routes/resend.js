@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
     res.type("application/json")
 
     //Retrieve data from query params
-    var email = req.body.email
+    var email = req.query.email
     //Verify that the caller supplied all the parameters
     //In js, empty strings or null values evaluate to false
     if(email) {
