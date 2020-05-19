@@ -18,6 +18,8 @@ let config = {
     secret: process.env.JSON_WEB_TOKEN
 }
 
+const req = require('request')
+
 /**
  * @api {get} /auth Request to sign a user in the system
  * @apiName GetAuth
@@ -53,7 +55,7 @@ router.get("/", (request, response) => {
         pool.query(theQuery, values)
             .then(result => { 
                 if (result.rowCount == 0) {
-                    request(url, function (error, res, body) {
+                    req(url, function (error, res, body) {
                         if (error) {
                             response.send(error)
                         } else {
