@@ -10,11 +10,6 @@ var router = express.Router()
 //This allows parsing of the body of POST requests, that are encoded in JSON
 router.use(require("body-parser").json())
 
-let jwt = require('jsonwebtoken')
-let config = {
-    secret: process.env.JSON_WEB_TOKEN
-  }
-
 /**
  * @apiDefine JSONError
  * @apiError (400: JSON Error) {String} message "malformed JSON in parameters"
@@ -285,8 +280,28 @@ router.put("/:chatId?/", (request, response, next) => {
  * 
  * @apiUse JSONError
  */ 
-router.get("/", (request, response) => {
-        //REtrive the chatIds
+router.get("/", (request, response, next) => {
+    //validate chat id exists
+    let query = 'SELECT * FROM Members WHERE MemberId=$1'
+    let values = [request.decoded.memberid]
+
+    pool.query(query, values)
+        .then(result => {
+            if (result.rowCount == 0) {
+                response.status(404).send({
+                    message: "Member ID not found"
+                })
+            } else {
+                next()
+            }
+        }).catch(error => {
+            response.status(400).send({
+                message: "SQL Error",
+                error: error
+            })
+        })
+    }, (request, response) => {
+        //Retrive the chatIds
         let query = `SELECT ChatId
                     FROM ChatMembers
                     WHERE MemberId=$1`
