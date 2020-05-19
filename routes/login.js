@@ -47,14 +47,24 @@ router.get("/", (request, response) => {
     const [email, theirPw] = credentials.split(":")
 
     if(email && theirPw) {
+        let url = `https://team-2-tcss-450-backend.herokuapp.com/resend?email=${email}`
         let theQuery = "SELECT Password, Salt, MemberId FROM Members WHERE Email=$1 AND Verification=$2"
         let values = [email, 1]   
         pool.query(theQuery, values)
             .then(result => { 
                 if (result.rowCount == 0) {
-                    response.status(404).send({
-                        message: "User not verified" 
+                    request(url, function (error, res, body) {
+                        if (error) {
+                            response.send(error)
+                        } else {
+                            // pass on everything (try out each of these in Postman to see the difference)
+                            response.send(res);
+                        }
                     })
+                    // response.status(404).send({
+                    //     message: "User not verified" 
+
+                    // })
                     return
                 }
                 let salt = result.rows[0].salt
