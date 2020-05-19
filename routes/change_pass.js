@@ -15,12 +15,6 @@ const bodyParser = require("body-parser")
 //This allows parsing of the body of POST requests, that are encoded in JSON
 router.use(bodyParser.json())
 
-//Pull in the JWT module along with out asecret key
-let jwt = require('jsonwebtoken')
-let config = {
-    secret: process.env.JSON_WEB_TOKEN
-}
-
 /**
  * @api {post} /change_pass
  * @apiName PostChange_Pass
