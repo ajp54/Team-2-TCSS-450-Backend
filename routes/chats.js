@@ -339,13 +339,11 @@ router.put("/:chatId?/", (request, response, next) => {
 // });
 
 /**
- * @api {get} /chats/:chatId? Request to get the chat rooms a user is part of
+ * @api {get} /chats/ Request to get a collection of the chat rooms the user is part of
  * @apiName GetMembers
  * @apiGroup Chats
  * 
  * @apiHeader {String} authorization Valid JSON Web Token JWT
- * 
- * @apiParam {Number} memberId the member to look up. 
  * 
  * @apiSuccess {Number} rowCount the number of chat IDs returned
  * @apiSuccess {Object[]} chatIds List of chat IDs the member is in
@@ -371,7 +369,7 @@ router.get("/", (request, response, next) => {
                   .then(result => {
                       //We successfully update the user, let the user know
                       response.status(201).send({
-                          verification: result.rows[0].verification
+                          memberId: result.rows
                       })
                   })
                   .catch((err) => {
@@ -386,9 +384,9 @@ router.get("/", (request, response, next) => {
         }
         
       }
-      response.send({
-        message: "Members in the chat room have been retrieved." 
-      })
+    //   response.send({
+    //     memberId: "Members in the chat room have been retrieved." 
+    //   })
 });
 
 /**
