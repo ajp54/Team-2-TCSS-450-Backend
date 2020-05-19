@@ -41,6 +41,7 @@ router.use(bodyParser.json())
  */ 
 router.post('/', (req, res) => {
     res.type("application/json")
+    res.send("hello")
 
     //Retrieve data from query params
     var newpassword = req.query.newpw
