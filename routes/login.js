@@ -47,7 +47,7 @@ router.get("/", (request, response) => {
     const [email, theirPw] = credentials.split(":")
 
     if(email && theirPw) {
-        let theQuery = "SELECT Password, Salt FROM Members WHERE Email=$1 AND Verification=$2"
+        let theQuery = "SELECT Password, Salt, MemberId FROM Members WHERE Email=$1 AND Verification=$2"
         let values = [email, 1]   
         pool.query(theQuery, values)
             .then(result => { 
