@@ -289,7 +289,7 @@ router.get("/", (request, response, next) => {
         .then(result => {
             if (result.rowCount == 0) {
                 response.status(404).send({
-                    message: "Member ID \"" + request.decoded.memberid +"\" not found"
+                    message: "Member ID \"" + request.memberid +"\" not found"
                 })
             } else {
                 next()
