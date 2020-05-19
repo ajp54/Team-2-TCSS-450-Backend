@@ -30,7 +30,7 @@ let config = {
 router.get("/", (request, response) => {
     if(request.query.token != null) {
       try {
-
+        response.send(request.query.token)
         var password = crypto.randomBytes(10).toString("hex")
         password = password.concat("$Sb9")
 
@@ -44,7 +44,7 @@ router.get("/", (request, response) => {
                 .then(result => {
                     //We successfully update the user, let the user know
                     response.status(201).send({
-                        success: true
+                        message: `Please use the temporary password to login and then change your password.`
                     })
                 })
                 .catch((err) => {
