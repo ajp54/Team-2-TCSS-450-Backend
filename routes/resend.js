@@ -1,9 +1,12 @@
 //express is the framework we're going to use to handle requests
 const express = require('express')
 
-let sendEmail = require('../utilities/utils').sendEmail
-
 var router = express.Router()
+
+//Access the connection to Heroku Database
+let pool = require('../utilities/utils').pool
+
+let sendEmail = require('../utilities/utils').sendEmail
 
 const bodyParser = require("body-parser")
 //This allows parsing of the body of POST requests, that are encoded in JSON
@@ -29,11 +32,10 @@ let config = {
 router.get('/', (req, res) => {
     res.type("application/json")
 
-    //Retrieve data from query params
-    var email = req.body.email
     //Verify that the caller supplied all the parameters
     //In js, empty strings or null values evaluate to false
-    if(email) {
+    if(req.query.email != null) {
+        var email = req.query.email
         if(email.length <= 2 || email.includes(" ") || !email.includes("@")) {
             res.status(400).send({
                 message: "Invalid email registration information"

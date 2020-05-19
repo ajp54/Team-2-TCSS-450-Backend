@@ -3,6 +3,9 @@ const express = require('express')
 
 var router = express.Router()
 
+//We use this create the SHA256 hash
+const crypto = require("crypto")
+
 //Access the connection to Heroku Database
 let pool = require('../utilities/utils').pool
 
@@ -22,7 +25,7 @@ let config = {
  * @apiName GetTemp_pass
  * @apiGroup Temp_pass
  * 
- * @apiParam {String} a token to identify the user
+ * @apiParam {String} a email to identify the user
  * 
  * @apiSuccess (Success 201) {boolean} success true when the user password is set to a temporary value
  * 
@@ -31,7 +34,7 @@ router.get("/", (request, response) => {
     if(request.query.token != null) {
       try {
 
-        let password = crypto.randomBytes(10).toString("hex")
+        var password = crypto.randomBytes(10).toString("hex")
         password = password.concat("$Sb9")
 
         let salt = crypto.randomBytes(32).toString("hex")

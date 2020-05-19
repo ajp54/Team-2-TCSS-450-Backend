@@ -1,6 +1,8 @@
 //express is the framework we're going to use to handle requests
 const express = require('express')
 
+var router = express.Router()
+
 //We use this create the SHA256 hash
 const crypto = require("crypto")
 
@@ -8,8 +10,6 @@ const crypto = require("crypto")
 let pool = require('../utilities/utils').pool
 
 let getHash = require('../utilities/utils').getHash 
-
-var router = express.Router()
 
 const bodyParser = require("body-parser")
 //This allows parsing of the body of POST requests, that are encoded in JSON
@@ -43,26 +43,11 @@ router.post('/', (req, res) => {
     res.type("application/json")
 
     //Retrieve data from query params
-    var email = req.body.email
-    var password = req.body.password
-    var newpassword = req.body.newpassword
+    var newpassword = req.query.newpw
     //Verify that the caller supplied all the parameters
     //In js, empty strings or null values evaluate to false
-    if(email && password && newpassword) {
-        if(email.length <= 2 || email.includes(" ") || !email.includes("@")) {
-            res.status(400).send({
-                message: "Invalid email registration information"
-            })
-        } else if(password.length <= 7 || 
-                  password.match("[@#$%&*!?]") == null || 
-                  password.includes(" ") ||
-                  password.match("[0-9]") == null ||
-                  password.match("[a-z]") == null ||
-                  password.match("[A-Z]") == null) {
-            res.status(400).send({
-                message: "Invalid password registration information"
-            })
-        } else if(newpassword.length <= 7 ||
+    if(newpassword) {
+        if(newpassword.length <= 7 ||
                   newpassword.match("[@#$%&*!?]") == null || 
                   newpassword.includes(" ") ||
                   newpassword.match("[0-9]") == null ||
@@ -74,9 +59,11 @@ router.post('/', (req, res) => {
         } else {
             //We're storing salted hashes to make our application more secure
             let salt = crypto.randomBytes(32).toString("hex")
-            let salted_hash = getHash(password, salt)
+            let salted_hash = getHash(newpassword, salt)
 
-            let theQuery = "UPDATE MEMBERS SET salted_hash=$1, salt=$2 WHERE email=$3"
+            let email = req.decoded.email
+
+            let theQuery = "UPDATE MEMBERS SET password=$1, salt=$2 WHERE email=$3"
             let values = [salted_hash, salt, email]
             pool.query(theQuery, values)
                 .then(result => {
