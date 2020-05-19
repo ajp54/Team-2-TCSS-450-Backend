@@ -46,9 +46,9 @@ router.get("/", (request, response) => {
         pool.query(theQuery, values)
                 .then(result => {
                     //We successfully update the user, let the user know
-                    response.status(201).send({
-                        message: `Please use the temporary password to login and then change your password.`
-                    })
+                    response.status(201).send(
+                        `Please use the temporary password ${password} to login and then change your password.`
+                    )
                 })
                 .catch((err) => {
                     //log the error
@@ -63,7 +63,7 @@ router.get("/", (request, response) => {
       
     }
     response.send({
-      message: `Please use the temporary password to login and then change your password.`
+      message: "No jwt token is in the URL."
     })
   
   })
