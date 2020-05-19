@@ -3,6 +3,9 @@ const express = require('express')
 
 var router = express.Router()
 
+//We use this create the SHA256 hash
+const crypto = require("crypto")
+
 //Access the connection to Heroku Database
 let pool = require('../utilities/utils').pool
 
@@ -32,7 +35,6 @@ router.get("/", (request, response) => {
       try {
 
         var password = crypto.randomBytes(10).toString("hex")
-        response.send(password)
         password = password.concat("$Sb9")
 
         let salt = crypto.randomBytes(32).toString("hex")
