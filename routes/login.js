@@ -47,7 +47,7 @@ router.get("/", (request, response) => {
     const [email, theirPw] = credentials.split(":")
 
     if(email && theirPw) {
-        let theQuery = "SELECT Password, Salt FROM Members WHERE Email=$1 AND Verification=$2"
+        let theQuery = "SELECT Password, Salt MemberID FROM Members WHERE Email=$1 AND Verification=$2"
         let values = [email, 1]   
         pool.query(theQuery, values)
             .then(result => { 
@@ -71,7 +71,7 @@ router.get("/", (request, response) => {
                     //credentials match. get a new JWT
                     let token = jwt.sign({
                         "email": email,
-                        "memberid": result.rows[0].memberid
+                        memberid: result.rows[0].memberid
                     },
 
                         config.secret,
