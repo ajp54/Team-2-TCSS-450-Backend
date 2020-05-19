@@ -8,8 +8,12 @@ var router = express.Router()
 
 
 //This allows parsing of the body of POST requests, that are encoded in JSON
-router.use(require("body-parser").json())
+// router.use(require("body-parser").json())
 
+/**
+ * @apiDefine JSONError
+ * @apiError (400: JSON Error) {String} message "malformed JSON in parameters"
+ */ 
 
 /**
  * @api {get} /chats/:chatId? Request to get the chat rooms a user is part of
@@ -72,3 +76,5 @@ router.get("/", (request, response, next) => {
                 })
             })
 });
+
+module.exports = router
