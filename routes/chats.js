@@ -360,13 +360,13 @@ router.put("/:chatId?/", (request, response, next) => {
 router.get("/", (request, response, next) => {
     if(request.query.token != null) {
         try {
-          let user = jwt.verify(request.query.token, config.secret)
-          response.send(user.success)
+          //response.send(request)
+          //response.send(user.success)
           //response.send(jwt.verify(request.query.token, config.secret))
           let theQuery = `SELECT ChatId
                           FROM ChatMembers
                           WHERE MemberId=$1`
-          let values = [user.memberid]
+          let values = [request.decoded.memberid]
           pool.query(theQuery, values)
                   .then(result => {
                       //We got the chatIds, now send them to the user.
