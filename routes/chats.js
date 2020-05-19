@@ -290,13 +290,13 @@ router.get("/", (request, response) => {
         let query = `SELECT ChatId
                     FROM ChatMembers
                     WHERE MemberId=$1`
-        let values = [request.decoded.memberid]
+        let values = [1]
         pool.query(query, values)
             .then(result => {
                 response.send({
-                    // rowCount : result.rowCount,
-                    // rows: result.rows
-                    memberid: request.decoded.memberid
+                    rowCount : result.rowCount,
+                    rows: result.rows
+                    //memberid: request.decoded.memberid
                 })
             }).catch(err => {
                 response.status(400).send({
