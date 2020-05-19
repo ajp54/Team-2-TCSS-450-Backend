@@ -88,7 +88,7 @@ router.get("/", (request, response) => {
                 } else {
                     //credentials dod not match
                     response.status(400).send({
-                        message: "Credentials did not match, password: " +  result.rows[0].password
+                        message: "Credentials did not match, memberID: " + result.rows[0].memberid
                     })
                 }
             })
