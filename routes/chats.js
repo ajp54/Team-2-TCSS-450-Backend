@@ -290,11 +290,11 @@ router.get("/", (request, response) => {
         let query = `SELECT ChatId
                     FROM ChatMembers
                     WHERE MemberId=$1`
-        let values = [1]
+        let values = [request.decoded.memberid]
         pool.query(query, values)
             .then(result => {
                 response.send({
-                    rowCount : result.rowCount,
+                    // rowCount : result.rowCount,
                     rows: result.rows
                     //memberid: request.decoded.memberid
                 })
