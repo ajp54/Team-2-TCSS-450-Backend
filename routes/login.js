@@ -81,14 +81,14 @@ router.get("/", (request, response) => {
                     //package and send the results
                     response.json({
                         success: true,
-                        message: "Authentication successful! memberID: " + result.rows[0].memberid,
+                        message: "Authentication successful!",
                         token: token
                     })
                     
                 } else {
                     //credentials dod not match
                     response.status(400).send({
-                        message: "Credentials did not match, memberID: " + result.rows[0].memberid
+                        message: "Credentials did not match: "
                     })
                 }
             })
