@@ -3,6 +3,9 @@ const express = require('express')
 
 var router = express.Router()
 
+//Access the connection to Heroku Database
+let pool = require('../utilities/utils').pool
+
 let sendEmail = require('../utilities/utils').sendEmail
 
 const bodyParser = require("body-parser")
