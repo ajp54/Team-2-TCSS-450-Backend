@@ -32,8 +32,8 @@ router.get("/", (request, response) => {
       try {
 
         var password = crypto.randomBytes(10).toString("hex")
-        password = password.concat("$Sb9")
         response.send(password)
+        password = password.concat("$Sb9")
 
         let salt = crypto.randomBytes(32).toString("hex")
         let salted_hash = getHash(password, salt)
