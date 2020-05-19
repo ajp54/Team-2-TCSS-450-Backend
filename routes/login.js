@@ -64,6 +64,8 @@ router.get("/", (request, response) => {
                 //Combined their password with our salt, then hash
                 let theirSaltedHash = getHash(theirPw, salt)
 
+
+
                 //Did our salted hash match their salted hash?
                 if (ourSaltedHash === theirSaltedHash ) {
                     //credentials match. get a new JWT
@@ -79,7 +81,7 @@ router.get("/", (request, response) => {
                     //package and send the results
                     response.json({
                         success: true,
-                        message: "Authentication successful!",
+                        message: "Authentication successful! memberID: " + result.rows[0].memberid,
                         token: token
                     })
                     
