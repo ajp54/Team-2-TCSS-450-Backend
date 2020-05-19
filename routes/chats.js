@@ -286,7 +286,7 @@ router.put("/:chatId?/", (request, response, next) => {
  * @apiUse JSONError
  */ 
 router.get("/", (request, response) => {
-        //REtrive the members
+        //REtrive the chatIds
         let query = `SELECT ChatId
                     FROM ChatMembers
                     WHERE MemberId=$1`
@@ -294,8 +294,9 @@ router.get("/", (request, response) => {
         pool.query(query, values)
             .then(result => {
                 response.send({
-                    rowCount : result.rowCount,
-                    rows: result.rows
+                    // rowCount : result.rowCount,
+                    // rows: result.rows
+                    memberid: request.decoded.memberid
                 })
             }).catch(err => {
                 response.status(400).send({
