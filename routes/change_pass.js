@@ -57,13 +57,12 @@ router.post('/', (req, res) => {
                 message: "Invalid new password registration information"
             })
         } else {
-            res.send("hello")
             //We're storing salted hashes to make our application more secure
             let salt = crypto.randomBytes(32).toString("hex")
             let salted_hash = getHash(newpassword, salt)
 
             let email = req.decoded.email
-
+            res.send("hello")
             let theQuery = "UPDATE MEMBERS SET salted_hash=$1, salt=$2 WHERE email=$3"
             let values = [salted_hash, salt, email]
             pool.query(theQuery, values)
