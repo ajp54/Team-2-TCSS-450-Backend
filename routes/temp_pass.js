@@ -22,7 +22,7 @@ let config = {
  * @apiName GetTemp_pass
  * @apiGroup Temp_pass
  * 
- * @apiParam {String} a token to identify the user
+ * @apiParam {String} a email to identify the user
  * 
  * @apiSuccess (Success 201) {boolean} success true when the user password is set to a temporary value
  * 
@@ -31,7 +31,7 @@ router.get("/", (request, response) => {
     if(request.query.token != null) {
       try {
 
-        let password = crypto.randomBytes(10).toString("hex")
+        var password = crypto.randomBytes(10).toString("hex")
         password = password.concat("$Sb9")
 
         let salt = crypto.randomBytes(32).toString("hex")
@@ -60,7 +60,7 @@ router.get("/", (request, response) => {
       
     }
     response.send({
-      message: `Please use the temporary password ${password} to login and then change your password.`
+      message: `Please use the temporary password to login and then change your password.`
     })
   
   })
