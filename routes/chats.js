@@ -369,7 +369,7 @@ router.get("/", (request, response, next) => {
                   .then(result => {
                       //We successfully update the user, let the user know
                       response.status(201).send({
-                          memberId: result.rows
+                          memberId: result.chatId
                       })
                   })
                   .catch((err) => {
