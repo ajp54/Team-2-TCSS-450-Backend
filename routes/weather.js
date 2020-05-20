@@ -25,6 +25,7 @@ router.get("/", (request, response) => {
     if(request.query.zipcode) {
         let zipcode = request.query.zipcode
         if(zipcode.toString().length < 5) {
+            response.send("uh oh")
             res.status(400).send({
                 message: "Invalid zipcode information"
             })
