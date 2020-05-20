@@ -120,9 +120,6 @@ router.post("/", (request, response) => {
             message: "Missing required information"
         })
       }
-      response.send({
-        message: "Contacts have been retrieved." 
-      })
 });
 
 /**
@@ -132,9 +129,9 @@ router.post("/", (request, response) => {
  * 
  * @apiHeader {String} authorization Valid JSON Web Token JWT
  * 
- * @apiParam {String} otherEmail the email to add to users contacts
+ * @apiParam {String} username the username of the contact to delete
  * 
- * @apiSuccess {String} successfully added to contacts 
+ * @apiSuccess {String} successfully deleted from contracts
  * 
  * @apiError (400: Missing Parameters) {String} message "Missing required information"
  * 
@@ -143,18 +140,21 @@ router.post("/", (request, response) => {
  * @apiUse JSONError
  */ 
 router.delete("/", (request, response) => {
-    if(request.body.otherEmail != null && request.decoded != null) {
+    if(request.body.username != null && request.decoded != null) {
         try {
           let user = request.decoded
           let theQuery = `DELETE FROM Contacts
                           WHERE memberID_A=$1
-                          AND memberID_B=`
-          let values = [user.memberid, request.body.othermemberID]
+                          AND memberID_B=
+                          (SELECT memberid
+                           FROM members 
+                           WHERE username=$2)`
+          let values = [user.memberid, request.body.username]
           pool.query(theQuery, values)
                   .then(result => {
                       //We successfully update the user, let the user know
                       response.send({
-                          message: "Successfully added to contacts."
+                          message: "Successfully deleted from contacts."
                       })
                   })
                   .catch((err) => {
@@ -174,9 +174,6 @@ router.delete("/", (request, response) => {
             message: "Missing required information"
         })
       }
-      response.send({
-        message: "Contacts have been retrieved." 
-      })
 });
 
 module.exports = router
