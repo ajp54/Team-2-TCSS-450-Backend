@@ -29,6 +29,7 @@ let config = {
  * 
  * @apiSuccess (Success 201) {boolean} success true when the user password is set to a temporary value
  * 
+ * @apiErro (400) {String} send the error details in responase
  */ 
 router.get("/", (request, response) => {
     if(request.query.token != null) {

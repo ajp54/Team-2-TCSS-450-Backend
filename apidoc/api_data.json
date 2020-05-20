@@ -91,7 +91,7 @@
   },
   {
     "type": "post",
-    "url": "/register",
+    "url": "/auth",
     "title": "Request to register a user",
     "name": "PostAuth",
     "group": "Auth",
@@ -193,6 +193,278 @@
     "filename": "routes/register.js",
     "groupTitle": "Auth"
   },
+  {
+    "type": "put",
+    "url": "/auth",
+    "title": "Request to insert a pushy token",
+    "name": "PutAuth",
+    "group": "Auth",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Authorization of valid JSON Web Token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Pushy token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true when the user verification is updated</p>"
+          },
+          {
+            "group": "Success 201",
+            "type": "String",
+            "optional": false,
+            "field": "verification number",
+            "description": "<p>the verification number of the user</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400: Missing Parameters": [
+          {
+            "group": "400: Missing Parameters",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>&quot;Missing required information&quot;</p>"
+          }
+        ],
+        "400: User Not Found": [
+          {
+            "group": "400: User Not Found",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>&quot;user not found&quot;</p>"
+          }
+        ],
+        "400: JSON Error": [
+          {
+            "group": "400: JSON Error",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>&quot;Malformed JSON in Parameters&quot;</p>"
+          }
+        ],
+        "400: SQL Error": [
+          {
+            "group":"400: SQL Error",
+            "type":"String",
+            "optional":false,
+            "field": "message",
+            "description":"<p>the reported SQL error details</p>"
+          }
+        ]
+      }
+    },
+    "version":"0.0.0",
+    "filename": "routes/pushyregister.js",
+    "groupTitle": "Verify"
+  }, 
+  {
+    "type": "get",
+    "url": "/resend",
+    "title": "Request to resend email verification",
+    "name": "GetResend",
+    "group": "Resend",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>users email</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true when the user memberid is selected</p>"
+          },
+          {
+            "group": "Success 201",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>tthe email of the user inserted</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400: SQL Error": [
+          {
+            "group":"400: SQL Error",
+            "type":"String",
+            "optional":false,
+            "field": "message",
+            "description":"<p>the reported SQL error details</p>"
+          }
+        ],
+        "400: Missing Parameters": [
+          {
+            "group": "400: Missing Parameters",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>&quot;Missing required information&quot;</p>"
+          }
+        ]
+      }
+    },
+    "version":"0.0.0",
+    "filename": "routes/pushyregister.js",
+    "groupTitle": "Verify"
+  }, 
+  {
+    "type": "post",
+    "url": "/change_pass",
+    "title": "Request to change a users password",
+    "name": "GetChange_Pass",
+    "group": "change_pass",
+    "parameter": {
+      "fields": {
+        "Email": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>users email</p>"
+          }
+        ],
+        "Password": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>users password</p>"
+          }
+        ],
+        "New Password": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>new user password</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "boolean",
+            "optional": false,
+            "field": "success",
+            "description": "<p>true when the user password is updated</p>"
+          },
+          {
+            "group": "Success 201",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>tthe email of the user updated</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400: Invalid Email": [
+          {
+            "group":"400: Invalid Email",
+            "type":"String",
+            "optional":false,
+            "field": "message",
+            "description":"<p>Invalid email information</p>"
+          }
+        ],
+        "400: Invalid Password": [
+          {
+            "group":"400: Invalid Password",
+            "type":"String",
+            "optional":false,
+            "field": "message",
+            "description":"<p>Invalid password information</p>"
+          }
+        ],
+        "400: Invalid new password": [
+          {
+            "group":"400: Invalid new password",
+            "type":"String",
+            "optional":false,
+            "field": "message",
+            "description":"<p>Invalid new password</p>"
+          }
+        ],
+        "400: Missing Parameters": [
+          {
+            "group": "400: Missing Parameters",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>&quot;Missing required information&quot;</p>"
+          }
+        ],
+        "400: SQL Error": [
+          {
+            "group":"400: SQL Error",
+            "type":"String",
+            "optional":false,
+            "field": "message",
+            "description":"<p>the reported SQL error details</p>"
+          }
+        ],
+      }
+    },
+    "version":"0.0.0",
+    "filename": "routes/pushyregister.js",
+    "groupTitle": "Verify"
+  }, 
+
   {
     "type": "get",
     "url": "/verify",

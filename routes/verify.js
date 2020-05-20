@@ -25,6 +25,7 @@ let config = {
  * @apiSuccess (Success 201) {boolean} success true when the user verification is updated
  * @apiSuccess (Success 201) {String} verification the verification number of the user
  * 
+ * @apiError (400) {String} Send the error details in response
  */ 
 router.get("/", (request, response) => {
     if(request.query.token != null) {

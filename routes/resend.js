@@ -27,7 +27,9 @@ let config = {
  * @apiSuccess (Success 201) {boolean} success true when the memberid is selected
  * @apiSuccess (Success 201) {String} email the email of the user inserted 
  * 
- * @apiError (400: Invalid email) {String} message "Invalid email registration information"
+ * @apiError (400) {String} message error details
+ * @apiError (400: missing parameter) {String} message missing parameter information
+ * 
  */ 
 router.get('/', (req, res) => {
     res.type("application/json")
@@ -64,20 +66,10 @@ router.get('/', (req, res) => {
                 })
                 .catch((err) => {
                     //log the error
-                    console.log(err)
-                    if (err.constraint == "members_username_key") {
-                        res.status(400).send({
-                            message: "Username exists"
-                        })
-                    } else if (err.constraint == "members_email_key") {
-                        res.status(400).send({
-                            message: "Email exists"
-                        })
-                    } else {
-                        res.status(400).send({
-                            message: err.detail
-                        })
-                    }
+                    //console.log(err)
+                    res.status(400).send({
+                        message: err.detail
+                    })
                 })
             
         }

@@ -12,7 +12,7 @@ router.use(require("body-parser").json())
 
 
 /**
- * @api {get} /contacts/get/
+ * @api {get} /contacts/ request to read contacts
  * @apiName GetContacts
  * @apiGroup Contacts
  * 
@@ -68,7 +68,7 @@ router.get("/", (request, response) => {
 });
 
 /**
- * @api {post} /contacts/post/
+ * @api {post} /contacts request to add contact
  * @apiName PostContacts
  * @apiGroup Contacts
  * 
@@ -124,7 +124,7 @@ router.post("/", (request, response) => {
 });
 
 /**
- * @api {delete} /contacts/delete/
+ * @api {delete} /contacts request to delete contact
  * @apiName DeleteContacts
  * @apiGroup Contacts
  * 

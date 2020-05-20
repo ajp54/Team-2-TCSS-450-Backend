@@ -76,15 +76,9 @@ router.post('/', (req, res) => {
                 .catch((err) => {
                     //log the error
                     //console.log(err)
-                    if (err.constraint == "members_email_key") {
-                        res.status(400).send({
-                            message: "Email exists"
-                        })
-                    } else {
-                        res.status(400).send({
-                            message: err.detail
-                        })
-                    }
+                    res.status(400).send({
+                        message: err.detail
+                    })
                 })
         }
     } else {

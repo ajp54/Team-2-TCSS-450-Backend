@@ -13,6 +13,8 @@ app.use('/auth', require('./routes/login.js'))
 
 app.use('/auth', require('./routes/register.js')) 
 
+app.use('/auth', middleware.checkToken, require('./routes/pushyregister.js'))
+
 app.use('/verify', require('./routes/verify.js'))
 
 app.get("/wait", (request, response) => {
@@ -23,19 +25,17 @@ message: "Thanks for waiting"
 }, 5000)
 }) 
 
+app.use('/resend', require('./routes/resend.js'))
+
+app.use('/change_pass', middleware.checkToken, require('./routes/change_pass.js'))
+
 app.use('/messages', middleware.checkToken, require('./routes/messages.js'))
 
 app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
 
 app.use('/chat_list', middleware.checkToken, require('./routes/chat_list.js'))
 
-app.use('/auth', middleware.checkToken, require('./routes/pushyregister.js'))
-
 app.use('/weather', require('./routes/weather.js'))
-
-app.use('/resend', require('./routes/resend.js'))
-
-app.use('/change_pass', middleware.checkToken, require('./routes/change_pass.js'))
 
 app.use('/forgot', require('./routes/forgot.js'))
 
