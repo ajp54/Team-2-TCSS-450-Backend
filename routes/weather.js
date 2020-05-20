@@ -24,9 +24,8 @@ router.get("/", (request, response) => {
     // hardcoded for UWT
     if(request.query.zipcode) {
         let zipcode = request.query.zipcode
-        if(zipcode.toString().length < 5) {
-            response.send("uh oh")
-            res.status(400).send({
+        if(zipcode.toString().length != 5) {
+            response.status(400).send({
                 message: "Invalid zipcode information"
             })
         } else {
