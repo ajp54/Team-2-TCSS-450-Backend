@@ -33,13 +33,13 @@ router.use(require("body-parser").json())
  */ 
 router.get("/", (request, response) => {
     if(request.decoded != null) {
-        response.send(request.decoded)
         try {
           let user = request.decoded
           let theQuery = `SELECT memberid_B FROM contacts
                           INNER JOIN members ON contacts.memberid_A=member.memberid
                           WHERE memberid=$1`
           let values = [user.memberid]
+          response.send(user.email)
           pool.query(theQuery, values)
                   .then(result => {
                       //We successfully update the user, let the user know
