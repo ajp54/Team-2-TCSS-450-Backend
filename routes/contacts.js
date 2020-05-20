@@ -35,9 +35,10 @@ router.get("/", (request, response) => {
     if(request.decoded != null) {
         try {
           let user = request.decoded
-          let theQuery = `SELECT memberid_B FROM contacts
-                          INNER JOIN members ON contacts.memberid_A=members.memberid
-                          WHERE memberid=$1`
+          let theQuery = `SELECT username 
+                          FROM members
+                          INNER JOIN contacts ON members.memberid=contacts.memberid_B
+                          WHERE memberid_A=$1`
           let values = [user.memberid]
           pool.query(theQuery, values)
                   .then(result => {
