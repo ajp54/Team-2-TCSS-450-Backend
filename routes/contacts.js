@@ -36,15 +36,15 @@ router.get("/", (request, response) => {
         try {
           let user = request.decoded
           let theQuery = `SELECT memberid_B FROM contacts
-                          INNER JOIN members ON contacts.memberid_A=member.memberid
+                          INNER JOIN members ON contacts.memberid_A=members.memberid
                           WHERE memberid=$1`
           let values = [user.memberid]
           pool.query(theQuery, values)
                   .then(result => {
                       //We successfully update the user, let the user know
                       response.send({
-                        message: "here"
-                        //rows: result.rows
+                        //message: "here"
+                        rows: result.rows
                       })
                   })
                   .catch((err) => {
