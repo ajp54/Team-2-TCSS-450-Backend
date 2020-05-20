@@ -84,12 +84,12 @@ router.post("/", (request, response) => {
         try {
           let user = request.decoded
           let theQuery = `INSERT INTO Contacts(memberID_A, memberID_B, verified)
-                          VALUES(SELECT members.memberid 
+                          VALUES((SELECT memberid 
                                  FROM members 
-                                 WHERE members.email=$1),
-                                (SELECT members.memberid
+                                 WHERE email=$1),
+                                (SELECT memberid
                                  FROM members
-                                 WHERE members.email=$2),
+                                 WHERE email=$2),
                                 $3)`
           let values = [user.email, request.body.otherEmail, 0]
           pool.query(theQuery, values)
