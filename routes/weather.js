@@ -24,14 +24,14 @@ router.get("/", (request, response) => {
     // hardcoded for UWT
     if(request.query.zipcode) {
         let zipcode = request.query.zipcode
-        if(zipcode.length < 5) {
+        if(zipcode.toString().length < 5) {
             res.status(400).send({
                 message: "Invalid zipcode information"
             })
         } else {
             let url = `http://api.worldweatheronline.com/premium/v1/weather.ashx?key=${API_KEY}&q=${zipcode}&format=json&num_of_days=7&fx24=yes`
 
-        response.redirect(url)
+            response.redirect(url)
         }
     } else {
         response.status(400).send({
