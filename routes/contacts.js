@@ -33,6 +33,7 @@ router.use(require("body-parser").json())
  */ 
 router.get("/", (request, response) => {
     if(request.decoded != null) {
+        response.send(request.decoded)
         try {
           let user = request.decoded
           let theQuery = `SELECT memberid_B FROM contacts
