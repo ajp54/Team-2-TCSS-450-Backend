@@ -41,6 +41,7 @@ app.use('/forgot', require('./routes/forgot.js'))
 
 app.use('/temp_pass', require('./routes/temp_pass.js'))
    
+app.use('/contacts',  middleware.checkToken, require('./routes/contacts.js'))
 
 /*
  * This middleware function will respond to inproperly formed JSON in 
