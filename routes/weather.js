@@ -22,8 +22,8 @@ var router = express.Router()
 router.get("/", (request, response) => {
 
     // hardcoded for UWT
-    if(request.params.zipcode) {
-        let zipcode = request.params.zipcode
+    if(request.query.zipcode) {
+        let zipcode = request.query.zipcode
 
         let url = `http://api.worldweatheronline.com/premium/v1/weather.ashx?key=${API_KEY}&q=${zipcode}&format=json&num_of_days=7&fx24=yes`
 
