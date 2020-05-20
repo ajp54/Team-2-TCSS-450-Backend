@@ -22,9 +22,18 @@ var router = express.Router()
 router.get("/", (request, response) => {
 
     // hardcoded for UWT
-    let url = `http://api.worldweatheronline.com/premium/v1/weather.ashx?key=${API_KEY}&q=98402&format=json&num_of_days=7&fx24=yes`
+    if(request.body.zipcode) {
+        let zipcode = request.body.zip
 
-    response.redirect(url)
+        let url = `http://api.worldweatheronline.com/premium/v1/weather.ashx?key=${API_KEY}&q=${zipcode}&format=json&num_of_days=7&fx24=yes`
+
+        response.redirect(url)
+    } else {
+        response.status(400).send({
+            message: "Missing required information"
+        })
+    }
+    
     // request(url, function(error, response) {
     //     console.log("MADE IT TO REQUEST")
     //     if (error) {
@@ -33,6 +42,10 @@ router.get("/", (request, response) => {
     //         response.send(response)
     //     }
     // })
+
+    //      let url = `http://api.worldweatheronline.com/premium/v1/weather.ashx?key=${API_KEY}&q=${zipcode}&format=json&num_of_days=7&fx24=yes`
+
+    //     response.redirect(url)
 })
 
 module.exports = router
