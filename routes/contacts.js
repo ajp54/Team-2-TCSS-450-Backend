@@ -62,9 +62,7 @@ router.get("/", (request, response) => {
             message: "Missing required information"
         })
       }
-      response.send({
-        message: "Contacts have been retrieved." 
-      })
+      
 });
 
 /**
