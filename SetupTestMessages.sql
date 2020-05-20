@@ -37,14 +37,26 @@ INSERT INTO
 VALUES
     ('test3First', 'test3Last', 'test3', 'test3@test.com', 'aafc93bbad0671a0531fa95168c4691be3a0d5e033c33a7b8be9941d2702e566', '5a3d1d9d0bda1e4855576fe486c3a188e14a3f1a381ea938cacdb8c799a3205f', 1);
 
---Create Global Chat room, ChatId 1
+--Create 3 Chat rooms, ChatIds 1, 2, and 3
 INSERT INTO
     chats(chatid, name)
 VALUES
-    (1, 'Global Chat')
+    (1, 'test chat 1')
 RETURNING *;
 
---Add the three test users to Global Chat
+INSERT INTO
+    chats(chatid, name)
+VALUES
+    (2, 'test chat 2')
+RETURNING *;
+
+INSERT INTO
+    chats(chatid, name)
+VALUES
+    (3, 'test chat 3')
+RETURNING *;
+
+--Add the three test users to chat 1
 INSERT INTO 
     ChatMembers(ChatId, MemberId)
 SELECT 1, Members.MemberId
@@ -54,7 +66,27 @@ WHERE Members.Email='test1@test.com'
     OR Members.Email='test3@test.com'
 RETURNING *;
 
---Add Multiple messages to create a conversation
+--Add the three test users to chat 2
+INSERT INTO 
+    ChatMembers(ChatId, MemberId)
+SELECT 2, Members.MemberId
+FROM Members
+WHERE Members.Email='test1@test.com'
+    OR Members.Email='test2@test.com'
+    OR Members.Email='test3@test.com'
+RETURNING *;
+
+--Add the three test users to chat 3
+INSERT INTO 
+    ChatMembers(ChatId, MemberId)
+SELECT 3, Members.MemberId
+FROM Members
+WHERE Members.Email='test1@test.com'
+    OR Members.Email='test2@test.com'
+    OR Members.Email='test3@test.com'
+RETURNING *;
+
+--Add Multiple messages to create a conversation in chat 1
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
@@ -236,10 +268,11 @@ FROM Members
 WHERE Members.Email='test2@test.com'
 RETURNING *;
 
+-- add messages to chat 2
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    2, 
     'No way am I going to fail because fo you two. ',
     Members.MemberId
 FROM Members
@@ -249,37 +282,37 @@ RETURNING *;
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    2, 
     'Ok ok. No. Charles wont be happy with that.',
     Members.MemberId
 FROM Members
-WHERE Members.Email='test1@test.com'
+WHERE Members.Email='test2@test.com'
 RETURNING *;
 
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    2, 
     'My exam is over now. Ill get cracking on this thing',
     Members.MemberId
 FROM Members
-WHERE Members.Email='test1@test.com'
+WHERE Members.Email='test2@test.com'
 RETURNING *;
 
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    2, 
     'I can knoock it out tonight',
     Members.MemberId
 FROM Members
-WHERE Members.Email='test1@test.com'
+WHERE Members.Email='test2@test.com'
 RETURNING *;
 
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    2, 
     'If I get it by tmorrow AM',
     Members.MemberId
 FROM Members
@@ -289,7 +322,7 @@ RETURNING *;
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    2, 
     'i can finish by the aftershock',
     Members.MemberId
 FROM Members
@@ -299,17 +332,18 @@ RETURNING *;
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    2, 
     'aftershock',
     Members.MemberId
 FROM Members
 WHERE Members.Email='test3@test.com'
 RETURNING *;
 
+-- adding messages to chat 3
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    3, 
     'afternoon!!! stupid autocorrect',
     Members.MemberId
 FROM Members
@@ -319,7 +353,7 @@ RETURNING *;
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    3, 
     'Sounds like a plan',
     Members.MemberId
 FROM Members
@@ -329,7 +363,7 @@ RETURNING *;
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    3, 
     'lets do it',
     Members.MemberId
 FROM Members
@@ -339,17 +373,17 @@ RETURNING *;
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    3, 
     'lets dooooooo it',
     Members.MemberId
 FROM Members
-WHERE Members.Email='test1@test.com'
+WHERE Members.Email='test3@test.com'
 RETURNING *;
 
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    3, 
     '3 2 1 Break',
     Members.MemberId
 FROM Members
@@ -359,7 +393,7 @@ RETURNING *;
 INSERT INTO 
     Messages(ChatId, Message, MemberId)
 SELECT 
-    1, 
+    3, 
     'l8r',
     Members.MemberId
 FROM Members
