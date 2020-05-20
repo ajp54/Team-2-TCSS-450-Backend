@@ -29,6 +29,10 @@ app.use('/resend', require('./routes/resend.js'))
 
 app.use('/change_pass', middleware.checkToken, require('./routes/change_pass.js'))
 
+app.use('/forgot', require('./routes/forgot.js'))
+
+app.use('/temp_pass', require('./routes/temp_pass.js'))
+
 app.use('/messages', middleware.checkToken, require('./routes/messages.js'))
 
 app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
@@ -36,10 +40,6 @@ app.use('/chats', middleware.checkToken, require('./routes/chats.js'))
 app.use('/chat_list', middleware.checkToken, require('./routes/chat_list.js'))
 
 app.use('/weather', require('./routes/weather.js'))
-
-app.use('/forgot', require('./routes/forgot.js'))
-
-app.use('/temp_pass', require('./routes/temp_pass.js'))
    
 app.use('/contacts',  middleware.checkToken, require('./routes/contacts.js'))
 

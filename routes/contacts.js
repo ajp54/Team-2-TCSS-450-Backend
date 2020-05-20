@@ -12,7 +12,7 @@ router.use(require("body-parser").json())
 
 
 /**
- * @api {get} /contacts/ request to read contacts
+ * @api {get} /contacts/ request to read contacts usernames
  * @apiName GetContacts
  * @apiGroup Contacts
  * 
@@ -20,12 +20,7 @@ router.use(require("body-parser").json())
  * 
  * @apiParam {Number} memberId the member to look up. 
  * 
- * @apiSuccess {Object[]} chatIds List of chat IDs the member is in
- * @apiSuccess {String} messages.email The email for the member in the chat
- * 
- * @apiError (404: ChatId Not Found) {String} message "Member ID Not Found"
- * @apiError (400: Invalid Parameter) {String} message "Malformed parameter. memberId must be a number" 
- * @apiError (400: Missing Parameters) {String} message "Missing required information"
+ * @apiSuccess {Object[]} username List of usernames the user has in contacts
  * 
  * @apiError (400: SQL Error) {String} message the reported SQL error details
  * 
