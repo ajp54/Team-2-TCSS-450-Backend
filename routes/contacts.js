@@ -39,12 +39,12 @@ router.get("/", (request, response) => {
                           INNER JOIN members ON contacts.memberid_A=member.memberid
                           WHERE memberid=$1`
           let values = [user.memberid]
-          response.send(user.email)
           pool.query(theQuery, values)
                   .then(result => {
                       //We successfully update the user, let the user know
                       response.send({
-                        rows: result.rows
+                        message: "here"
+                        //rows: result.rows
                       })
                   })
                   .catch((err) => {
