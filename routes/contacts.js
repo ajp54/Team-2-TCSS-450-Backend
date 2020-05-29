@@ -26,39 +26,36 @@ router.use(require("body-parser").json())
  * 
  * @apiUse JSONError
  */ 
-router.get("/", (request, response) => {
-    if(request.decoded != null) {
-        try {
-          let user = request.decoded
-          let theQuery = `SELECT username 
-                          FROM members
-                          INNER JOIN contacts ON members.memberid=contacts.memberid_B
-                          WHERE memberid_A=$1`
-          let values = [user.memberid]
-          pool.query(theQuery, values)
-                  .then(result => {
-                      //We successfully update the user, let the user know
-                      response.send({
-                        //message: "here"
-                        rows: result.rows
-                      })
-                  })
-                  .catch((err) => {
-                      //log the error
-                      //console.log(err)
-                    response.status(400).send({
-                        message: err.detail
-                    })
-                  })
-        } catch (e) {
-          response.send(e)
-        }
-        
-      } else {
-        response.status(400).send({
-            message: "Missing required information"
-        })
-      }
+router.get("/", (request, response, next) => {
+    if(request.decoded == null) {
+      response.status(400).send({
+        message: "Missing required information"
+     })
+    } else {
+      next()
+    }
+}, (request, response) => {
+    let user = request.decoded
+    let theQuery = `SELECT username 
+                    FROM members
+                    INNER JOIN contacts ON members.memberid=contacts.memberid_B
+                    WHERE memberid_A=$1`
+    let values = [user.memberid]
+    pool.query(theQuery, values)
+            .then(result => {
+                //We successfully update the user, let the user know
+                response.send({
+                  //message: "here"
+                  rows: result.rows
+                })
+            })
+            .catch((err) => {
+                //log the error
+                //console.log(err)
+              response.status(400).send({
+                  message: err.detail
+              })
+            })
       
 });
 
@@ -69,54 +66,108 @@ router.get("/", (request, response) => {
  * 
  * @apiHeader {String} authorization Valid JSON Web Token JWT
  * 
- * @apiParam {String} otherEmail the email to add to users contacts
+ * @apiParam {String} otherUser the username to add to users contacts
  * 
  * @apiSuccess {String} successfully added to contacts 
  * 
+ * @apiError (400: Missing Username) {String} message "Missing required username to add to contacts"
+ * 
  * @apiError (400: Missing Parameters) {String} message "Missing required information"
+ * 
+ * @apiError (404: Contact not found) {String} message "Contact not found"
  * 
  * @apiError (400: SQL Error) {String} message the reported SQL error details
  * 
  * @apiUse JSONError
  */ 
-router.post("/", (request, response) => {
-    if(request.body.otherEmail != null && request.decoded != null) {
-        try {
-          let user = request.decoded
-          let theQuery = `INSERT INTO Contacts(memberID_A, memberID_B, verified)
-                          VALUES((SELECT memberid 
-                                 FROM members 
-                                 WHERE email=$1),
-                                (SELECT memberid
-                                 FROM members
-                                 WHERE email=$2),
-                                $3)`
-          let values = [user.email, request.body.otherEmail, 0]
-          pool.query(theQuery, values)
-                  .then(result => {
-                      //We successfully update the user, let the user know
-                      response.send({
-                          message: "Successfully added to contacts."
-                      })
-                  })
-                  .catch((err) => {
-                      //log the error
-                      //console.log(err)
-                    response.status(400).send({
-                        message: err.detail
-                    })
-                  })
-        } catch (e) {
-          response.send(e)
-        }
-        
-      }
-      else {
-        response.status(400).send({
-            message: "Missing required information"
+router.post("/", (request, response, next) => {
+  //validate that there are no empty parameters
+    if(request.body.username == null) {
+      response.status(400).send({
+        message: "Missing required username to add to contacts"
+      })
+    } else if(request.decoded == null) {
+      response.status(400).send({
+        message: "Missing required information"
+      })
+    } else {
+      next()
+    }
+}, (request, response, next) => {
+//validate that username exists in MEMBERS
+    let query = 'SELECT * FROM MEMBERS WHERE username=$1'
+    let values = [request.body.username]
+
+    pool.query(query, values)
+        .then(result => {
+          if(result.rowCount == 0) {
+            response.status(404).send({
+              message: "Contact not found"
+            })
+          } else {
+            next()
+          }
+        }).catch(error => {
+          response.status(400).send({
+            message: "SQL Error on contact check",
+            error: error
+          })
         })
-      }
-});
+}, (request, response, next) => {
+//validate that users are not already contacts
+  let user = request.decoded
+  let query = `SELECT * FROM CONTACTS 
+                WHERE memberID_A=(SELECT memberid
+                                  FROM members
+                                  WHERE email=$1)
+                AND memberID_B=(SELECT memberid
+                                FROM members
+                                WHERE username=$2)`
+  let values = [user.email, request.body.username]
+
+  pool.query(query, values)
+      .then(result => {
+        if(result.rowCount > 0) {
+          response.status(400).send({
+            message: "Username is already a contact"
+          })
+        } else {
+          next()
+        }
+      }).catch(error => {
+        response.status(400).send({
+          message: "SQL Error on already in contacts",
+          error: error
+        })
+      })
+},(request, response) => {
+    //insert username into users contacts
+      let user = request.decoded
+      let theQuery = `INSERT INTO Contacts(memberID_A, memberID_B, verified)
+                      VALUES((SELECT memberid 
+                              FROM members 
+                              WHERE email=$1),
+                            (SELECT memberid
+                              FROM members
+                              WHERE username=$2),
+                            $3)`
+      let values = [user.email, request.body.username, 0]
+      pool.query(theQuery, values)
+              .then(result => {
+                  //We successfully update the user, let the user know
+                  response.send({
+                      message: "Successfully added to contacts."
+                  })
+              })
+              .catch((err) => {
+                  //log the error
+                  //console.log(err)
+                response.status(400).send({
+                    message: "SQL Error on insert",
+                    error: err
+                })
+              })
+  });
 
 /**
  * @api {delete} /contacts request to delete contact
@@ -129,47 +180,102 @@ router.post("/", (request, response) => {
  * 
  * @apiSuccess {String} successfully deleted from contracts
  * 
+ * @apiError (400: Missing username) {String} message "Missing required contact username"
+ * 
  * @apiError (400: Missing Parameters) {String} message "Missing required information"
+ * 
+ * @apiError (404: Contact not found) {String} message "Contact not found"
+ * 
+ * @apiError (404: Username not a contact) {String} message "Username not a contact"
  * 
  * @apiError (400: SQL Error) {String} message the reported SQL error details
  * 
  * @apiUse JSONError
  */ 
-router.delete("/", (request, response) => {
-    if(request.body.username != null && request.decoded != null) {
-        try {
-          let user = request.decoded
-          let theQuery = `DELETE FROM Contacts
-                          WHERE memberID_A=$1
-                          AND memberID_B=
-                          (SELECT memberid
-                           FROM members 
-                           WHERE username=$2)`
-          let values = [user.memberid, request.body.username]
-          pool.query(theQuery, values)
-                  .then(result => {
-                      //We successfully update the user, let the user know
-                      response.send({
-                          message: "Successfully deleted from contacts."
-                      })
-                  })
-                  .catch((err) => {
-                      //log the error
-                      //console.log(err)
-                    response.status(400).send({
-                        message: err.detail
-                    })
-                  })
-        } catch (e) {
-          response.send(e)
+router.delete("/", (request, response, next) => {
+  //validate that there are no empty parameters
+  if(request.body.username == null) {
+    response.status(400).send({
+      message: "Missing required username to add to contacts"
+    })
+  } else if(request.decoded == null) {
+    response.status(400).send({
+      message: "Missing required information"
+    })
+  } else {
+    next()
+  }
+}, (request, response, next) => {
+  //validate that username exists in MEMBERS
+  let query = 'SELECT * FROM MEMBERS WHERE username=$1'
+  let values = [request.body.username]
+
+  pool.query(query, values)
+      .then(result => {
+        if(result.rowCount == 0) {
+          response.status(404).send({
+            message: "Contact not found"
+          })
+        } else {
+          next()
         }
-        
-      }
-      else {
+      }).catch(error => {
         response.status(400).send({
-            message: "Missing required information"
+          message: "SQL Error on contact check",
+          error: error
         })
-      }
+      })
+}, (request, response, next) => {
+//validate that users are already contacts
+  let user = request.decoded
+  let query = `SELECT * FROM CONTACTS 
+                WHERE memberID_A=(SELECT memberid
+                                  FROM members
+                                  WHERE email=$1)
+                AND memberID_B=(SELECT memberid
+                                FROM members
+                                WHERE username=$2)`
+  let values = [user.email, request.body.username]
+
+  pool.query(query, values)
+      .then(result => {
+        if(result.rowCount == 0) {
+          response.status(404).send({
+            message: "Username is not a contact of user"
+          })
+        } else {
+          next()
+        }
+      }).catch(error => {
+        response.status(400).send({
+          message: "SQL Error on already in contacts",
+          error: error
+        })
+      })
+}, (request, response) => {
+  let user = request.decoded
+  let theQuery = `DELETE FROM Contacts
+                  WHERE memberID_A=$1
+                  AND memberID_B=
+                  (SELECT memberid
+                    FROM members 
+                    WHERE username=$2)`
+  let values = [user.memberid, request.body.username]
+  pool.query(theQuery, values)
+          .then(result => {
+              //We successfully update the user, let the user know
+              response.send({
+                  message: "Successfully deleted from contacts."
+              })
+          })
+          .catch((err) => {
+              //log the error
+              //console.log(err)
+            response.status(400).send({
+                message: "SQL Error on delete",
+                error: err
+            })
+          })
 });
 
 module.exports = router

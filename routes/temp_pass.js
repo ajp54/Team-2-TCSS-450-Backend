@@ -42,7 +42,7 @@ router.get("/", (request, response) => {
         let salted_hash = getHash(password, salt)
 
         let user = jwt.verify(request.query.token, config.secret)
-        let theQuery = "UPDATE MEMBERS SET salted_hash=$1, salt=$2 WHERE email=$3"
+        let theQuery = "UPDATE MEMBERS SET password=$1, salt=$2 WHERE email=$3"
         let values = [salted_hash, salt, user.email]
         pool.query(theQuery, values)
                 .then(result => {

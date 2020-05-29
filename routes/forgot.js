@@ -21,20 +21,17 @@ let config = {
 }
 
 /**
- * @api {post} /forgot Request to resgister a user
+ * @api {post} /forgot Request to send a temporary password
  * @apiName GetForgot
  * @apiGroup Forgot
  * 
  * @apiParam {String} email a users email *required unique
  * 
- * @apiSuccess (Success 201) {boolean} success true when the name is inserted
- * @apiSuccess (Success 201) {String} email the email of the user inserted 
+ * @apiSuccess (Success 201) {boolean} success true when the memberid is selected
  * 
  * @apiError (400: Invalid email) {String} message "Invalid email information"
  * 
  * @apiError (400: Missing Parameters) {String} message "Missing required information"
- * 
- * @apiError (400: Email exists) {String} message "Email exists"
  * 
  * @apiError (400: SQL Error) {String} message the reported SQL error details
  */ 

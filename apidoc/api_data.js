@@ -1332,13 +1332,31 @@ define({ "api": [
     },
     "error": {
       "fields": {
+        "404: Contact not found": [
+          {
+            "group": "404: Contact not found",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Contact not found</p>"
+          }
+        ],
+        "400: Missing Username": [
+          {
+            "group": "400: Missing Username",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Missing username to add to contacts</p>"
+          }
+        ],
         "400: Missing Parameters": [
           {
             "group": "400: Missing Parameters",
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>the reported SQL error details</p>"
+            "description": "<p>Missing required user information</p>"
           }
         ],
         "400: SQL Error": [
@@ -1403,13 +1421,22 @@ define({ "api": [
     },
     "error": {
       "fields": {
+        "400: Missing Username": [
+          {
+            "group": "400: Missing Username",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Missing required contact username</p>"
+          }
+        ],
         "400: Missing Parameters": [
           {
             "group": "400: Missing Parameters",
             "type": "String",
             "optional": false,
             "field": "message",
-            "description": "<p>the reported SQL error details</p>"
+            "description": "<p>Missing required information</p>"
           }
         ],
         "400: SQL Error": [
