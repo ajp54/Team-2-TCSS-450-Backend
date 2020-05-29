@@ -55,9 +55,12 @@ function sendPassword(from, receiver, subj, emailToken) {
     attachments: [{
       filename: 'ShootTheBreezeLogo.png',
       path: __dirname + '/ShootTheBreezeLogo.png',
-      cid: 'logo'
+      cid: 'logo',
+      filename: 'ShootTheBreezeLogo2.png',
+      path: __dirname + '/ShootTheBreezeLogo2.png',
+      cid: 'logo2'
     }],
-    html: '<img src="cid:logo" alt="Shoot the Breeze Logo" width="175" height="150" style="vertical-align:bottom"><p> Please click here to get a new temporary email to Shoot the Breeze: <a href="https://team-2-tcss-450-backend.herokuapp.com/temp_pass?token=' + emailToken + '">here</a> Click to get a new temporary password.</p>'
+    html: '<img src="cid:logo" alt="Shoot the Breeze Logo" width="175" height="150" style="vertical-align:bottom"><p> Please click here to get a new temporary email to Shoot the Breeze: <a href="https://team-2-tcss-450-backend.herokuapp.com/temp_pass?token=' + emailToken + '"><img src="cid:logo2" alt="Shoot the Breeze Logo" width="50" height="42.5" style="vertical-align:bottom"></a> Click to get a new temporary password.</p>'
   };
 
   transporter.sendMail(mailOptions, function(error, info){
