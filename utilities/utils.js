@@ -52,7 +52,7 @@ function sendPassword(from, receiver, subj, emailToken) {
     to: receiver,
     subject: subj,
     text: 'A request was made through Shoot the Breeze to recover your password, if this was not you please ignore and/or delete this email.\n',
-    html: '<p> Please click here to get a new temporary email to Shoot the Breeze: <a href="https://team-2-tcss-450-backend.herokuapp.com/temp_pass?token=' + emailToken + '">here</a> Click to get a new temporary password.</p>'
+    html: '<img src="ShootTheBreezeLogo.png" alt="Shoot the Breeze Logo" width="42" height="42" style="vertical-align:bottom"><p> Please click here to get a new temporary email to Shoot the Breeze: <a href="https://team-2-tcss-450-backend.herokuapp.com/temp_pass?token=' + emailToken + '">here</a> Click to get a new temporary password.</p>'
   };
 
   transporter.sendMail(mailOptions, function(error, info){
