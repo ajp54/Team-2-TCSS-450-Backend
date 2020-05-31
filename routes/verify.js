@@ -36,19 +36,13 @@ router.get("/", (request, response) => {
       let user = jwt.verify(request.query.token, config.secret)
       let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
       let values = [user.email]
-      var http = require('http')
-      , fs = require('fs');
       
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
-                  fs.readFile(__dirname + '/ShootTheBreezeLogo.png', function(err, data) {
-                    if (err) throw err; // Fail if the file can't be read.
-                    http.createServer(function(req, res) {
-                      res.writeHead(200, {'Content-Type': 'image/png'});
-                      res.end(data); // Send the file data to the browser.
-                    }).listen(8124);
-                  });
+                  response.send({
+                    message: "You are now verified on Shoot the Breeze. You can log in now."
+                  })
               })
               .catch((err) => {
                   //log the error

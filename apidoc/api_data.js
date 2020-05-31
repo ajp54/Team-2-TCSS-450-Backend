@@ -1439,6 +1439,24 @@ define({ "api": [
             "description": "<p>Missing required information</p>"
           }
         ],
+        "404: Contact not found": [
+          {
+            "group": "404: Contact not found",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Contact not found</p>"
+          }
+        ],
+        "404: Not a contact": [
+          {
+            "group": "404: Not a contact",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Username is not a contact of user</p>"
+          }
+        ],
         "400: SQL Error": [
           {
             "group": "400: SQL Error",
