@@ -23,7 +23,16 @@ function sendEmail(from, receiver, subj, emailToken) {
     to: receiver,
     subject: subj,
     text: 'Your email was used for registration to Shoot the Breeze. If this was not you please ignore this email, and the link that follows.\n',
-    html: '<p> Please click here to confirm your email: <a href="https://team-2-tcss-450-backend.herokuapp.com/verify?token=' + emailToken + '">here</a> Click to verify email.</p>'
+    attachments: [{
+      filename: 'ShootTheBreezeLogo.png',
+      path: __dirname + '/ShootTheBreezeLogo.png',
+      cid: 'logo'},
+    {
+      filename: 'ShootTheBreezeLogo2.png',
+      path: __dirname + '/ShootTheBreezeLogo2.png',
+      cid: 'logo2'
+    }],
+    html: '<img src="cid:logo" alt="Shoot the Breeze Logo" width="180" height="150" style="vertical-align:bottom"><p> Please click here to confirm your email: <a href="https://team-2-tcss-450-backend.herokuapp.com/verify?token=' + emailToken + '"><img src="cid:logo2" alt="Shoot the Breeze Logo" width="30" height="25" style="vertical-align:bottom"></a> Click to verify email.</p>'
   };
 
   transporter.sendMail(mailOptions, function(error, info){
