@@ -36,27 +36,19 @@ router.get("/", (request, response) => {
       let user = jwt.verify(request.query.token, config.secret)
       let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
       let values = [user.email]
-      var options = {
-        root: path.join(__dirname, 'public'),
-        dotfiles: 'deny',
-        headers: {
-          'x-timestamp': Date.now(),
-          'x-sent': true
-        }
-      }
-    
-      var fileName = 'ShootTheBreezeLogo.png'
+      var http = require('http')
+      , fs = require('fs');
       
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
-                  response.sendFile(fileName, options, function (err) {
-                    if (err) {
-                      next(err)
-                    } else {
-                      console.log('Sent:', fileName)
-                    }
-                  })
+                  fs.readFile('ShootTheBreezeLogo.png', function(err, data) {
+                    if (err) throw err; // Fail if the file can't be read.
+                    http.createServer(function(req, res) {
+                      res.writeHead(200, {'Content-Type': 'image/png'});
+                      res.end(data); // Send the file data to the browser.
+                    }).listen(8124);
+                  });
               })
               .catch((err) => {
                   //log the error
