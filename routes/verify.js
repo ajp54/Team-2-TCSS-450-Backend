@@ -37,12 +37,14 @@ router.get("/", (request, response) => {
       let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
       let values = [user.email]
       var options = {
-
+        
       }
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
-                  response.sendFile('../utilities/ShootTheBreezeLogo.png')
+                  response.writeHeader(200, {"Content-Type": "text/html"})
+                  response.write('<html> <body> <img src = "../utilities/ShootTheBreezeLogo.png" alt="Shoot the Breeze Logo" width="180" height="150" style="vertical-align:bottom"> </img> </body> </html>')
+                  response.end()
               })
               .catch((err) => {
                   //log the error
