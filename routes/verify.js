@@ -36,14 +36,12 @@ router.get("/", (request, response) => {
       let user = jwt.verify(request.query.token, config.secret)
       let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
       let values = [user.email]
-      var options = {
-        
-      }
+      let path = __dirname + '/ShootTheBreezeLogo2.png'
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
-                  response.writeHeader(200, {"Content-Type": "text/html"})
-                  response.write('<html> <body> <img src = "../utilities/ShootTheBreezeLogo.png" alt="Shoot the Breeze Logo" width="180" height="150" style="vertical-align:bottom"> </img> </body> </html>')
+                  response.writeHead(200, {"Content-Type": "text/html"})
+                  response.write('<html> <body> <img src = ' + path + ' alt="Shoot the Breeze Logo" width="180" height="150" style="vertical-align:bottom"> </img> </body> </html>')
                   response.end()
               })
               .catch((err) => {
