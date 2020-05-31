@@ -36,13 +36,27 @@ router.get("/", (request, response) => {
       let user = jwt.verify(request.query.token, config.secret)
       let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
       let values = [user.email]
-      let path = __dirname + '/ShootTheBreezeLogo.png'
+      var options = {
+        root: path.join(__dirname, 'public'),
+        dotfiles: 'deny',
+        headers: {
+          'x-timestamp': Date.now(),
+          'x-sent': true
+        }
+      }
+    
+      var fileName = 'ShootTheBreezeLogo.png'
+      
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
-                  response.writeHead(200, {"Content-Type": "text/html"})
-                  response.write('<html> <body> <img src = ' + path + ' alt="Shoot the Breeze Logo" width="180" height="150" style="vertical-align:bottom"> </img> </body> </html>')
-                  response.end()
+                  response.sendFile(fileName, options, function (err) {
+                    if (err) {
+                      next(err)
+                    } else {
+                      console.log('Sent:', fileName)
+                    }
+                  })
               })
               .catch((err) => {
                   //log the error
