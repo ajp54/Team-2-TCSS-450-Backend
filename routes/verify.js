@@ -39,7 +39,7 @@ router.get("/", (request, response) => {
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
-                  response.send(<html> <body> <img src = {__dirname + "/</body>ShootTheBreezeLogo.png"} alt="Shoot the Breeze Logo" width="180" height="150" style="vertical-align:bottom"> </img> </body> </html>)
+                  response.send({message: "here"})
               })
               .catch((err) => {
                   //log the error
