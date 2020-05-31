@@ -28,34 +28,29 @@ let config = {
  * @apiError (400) {String} Send the error details in response
  */ 
 router.get("/", (request, response) => {
-    if(request.query.token != null) {
-      try {
-        let user = jwt.verify(request.query.token, config.secret)
-        let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
-        let values = [user.email]
-        pool.query(theQuery, values)
-                .then(result => {
-                    //We successfully update the user, let the user know
-                    response.status(201).send({
-                        verification: result.rows[0].verification
-                    })
-                })
-                .catch((err) => {
-                    //log the error
-                    //console.log(err)
-                  response.status(400).send({
-                      message: err.detail
+    if(request.query.token == null) {
+      res.status(400).send({
+        message: "Missing requiredtoken code for verification"
+      })
+    } else {
+      let user = jwt.verify(request.query.token, config.secret)
+      let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
+      let values = [user.email]
+      pool.query(theQuery, values)
+              .then(result => {
+                  //We successfully update the user, let the user know
+                  response.send({
+                    message: "Added"
                   })
+              })
+              .catch((err) => {
+                  //log the error
+                  //console.log(err)
+                response.status(400).send({
+                    message: err.detail
                 })
-      } catch (e) {
-        response.send(e)
-      }
-      
+              })
     }
-    response.send({
-      message: "Email has been Validated, and you can now login." 
-    })
-  
   })
 
   module.exports = router
