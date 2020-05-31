@@ -42,7 +42,7 @@ router.get("/", (request, response) => {
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
-                  fs.readFile('ShootTheBreezeLogo.png', function(err, data) {
+                  fs.readFile(__dirname + '/ShootTheBreezeLogo.png', function(err, data) {
                     if (err) throw err; // Fail if the file can't be read.
                     http.createServer(function(req, res) {
                       res.writeHead(200, {'Content-Type': 'image/png'});
