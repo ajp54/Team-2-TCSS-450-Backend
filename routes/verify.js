@@ -36,7 +36,7 @@ router.get("/", (request, response) => {
       let user = jwt.verify(request.query.token, config.secret)
       let theQuery = "UPDATE MEMBERS SET verification=1 WHERE email=$1"
       let values = [user.email]
-      let path = __dirname + '/ShootTheBreezeLogo2.png'
+      let path = __dirname + '/ShootTheBreezeLogo.png'
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
