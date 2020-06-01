@@ -36,7 +36,7 @@ router.get("/", (request, response, next) => {
     }
 }, (request, response) => {
     let user = request.decoded
-    let theQuery = `SELECT username 
+    let theQuery = `SELECT username, firstName, lastName
                     FROM members
                     INNER JOIN contacts ON (members.memberid=contacts.memberid_B
                     OR members.memberid=contacts.memberid_A)
