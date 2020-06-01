@@ -195,7 +195,7 @@ router.put("/:chatId?/", (request, response, next) => {
  * 
  * @apiSuccess {Number} rowCount the number of messages returned
  * @apiSuccess {Object[]} members List of members in the chat
- * @apiSuccess {String} messages.email The email for the member in the chat
+ * @apiSuccess {String} chatId The chatId of the current chat
  * 
  * @apiError (404: ChatId Not Found) {String} message "Chat ID Not Found"
  * @apiError (400: Invalid Parameter) {String} message "Malformed parameter. chatId must be a number" 
@@ -249,7 +249,8 @@ router.get("/:chatId?", (request, response, next) => {
             .then(result => {
                 response.send({
                     rowCount : result.rowCount,
-                    rows: result.rows
+                    chatId : request.params.chatId,
+                    rows : result.rows
                 })
             }).catch(err => {
                 response.status(400).send({
