@@ -57,7 +57,8 @@ router.get("/", (request, response, next) => {
                 //log the error
                 //console.log(err)
               response.status(400).send({
-                  message: err.detail
+                  message: "400 error: SQL error on getting contacts",
+                  error: err
               })
             })
       
