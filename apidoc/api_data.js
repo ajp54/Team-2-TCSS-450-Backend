@@ -1472,7 +1472,104 @@ define({ "api": [
     "filename": "routes/contacts.js",
     "groupTitle": "Contacts"
   },
-
+  {
+    "type": "Update",
+    "url": "/contacts",
+    "title": "Request to update contact",
+    "name": "PutContacts",
+    "group": "Contacts",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "authorization",
+            "description": "<p>Valid JSON Web Token JWT</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>the username of the contact to update</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success": [
+          {
+            "group": "Success",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>successfully updated contact</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400: Missing Username": [
+          {
+            "group": "400: Missing Username",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Missing required contact username</p>"
+          }
+        ],
+        "400: Missing Parameters": [
+          {
+            "group": "400: Missing Parameters",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Missing required information</p>"
+          }
+        ],
+        "404: Contact not found": [
+          {
+            "group": "404: Contact not found",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Contact not found</p>"
+          }
+        ],
+        "404: Not a contact": [
+          {
+            "group": "404: Not a contact",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Username is not a contact of user</p>"
+          }
+        ],
+        "400: SQL Error": [
+          {
+            "group": "400: SQL Error",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>the reported SQL error details</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/contacts.js",
+    "groupTitle": "Contacts"
+  },
   {
     "type": "get",
     "url": "/weather",
