@@ -205,9 +205,9 @@ router.post("/", (request, response, next) => {
  */ 
 router.delete("/", (request, response, next) => {
   //validate that there are no empty parameters
-  if(!request.body.username) {
+  if(request.body.username == null) {
     response.status(400).send({
-      message: "Missing required username to remove to contacts"
+      message: "Missing required username to remove from contacts"
     })
   } else if(request.decoded == null) {
     response.status(400).send({
