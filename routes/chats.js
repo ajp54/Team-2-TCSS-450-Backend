@@ -128,8 +128,8 @@ router.put("/:chatId?/", (request, response, next) => {
         //code here based on the results of the query
 }, (request, response, next) => {
     //validate email exists 
-    let query = `SELECT * FROM Members WHERE (Username=$1)
-                                        OR (email=$1)`
+    let query = `SELECT * FROM Members WHERE (Username=$1
+                                        OR email=$1)`
     let values = [request.body.username]
 
     pool.query(query, values)
@@ -163,8 +163,8 @@ router.put("/:chatId?/", (request, response, next) => {
                         WHERE (ChatId=$1
                         AND memberID=(SELECT memberid
                                         FROM members
-                                        WHERE username=$2))
-                        OR (ChatId=$1
+                                        WHERE username=$2)
+                        OR ChatId=$1
                         AND memberID=(SELECT memberid
                                         FROM members
                                         WHERE username=$2))`
@@ -201,13 +201,10 @@ router.put("/:chatId?/", (request, response, next) => {
     let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
                     VALUES ($1, (SELECT memberid
                                 FROM members
-                                WHERE username=$2)
-                            OR
-                                (SELECT memberid
-                                FROM members
-                                WHERE email=$2)
-                                
-                        RETURNING *`
+                                WHERE (username=$2
+                                    OR
+                                    email=$2)))
+                            RETURNING *`
     let values = [request.params.chatId, request.body.username]
     pool.query(insert, values)
         .then(result => {
