@@ -163,8 +163,8 @@ router.put("/:chatId?/", (request, response, next) => {
                         WHERE (ChatId=$1
                         AND memberID=(SELECT memberid
                                         FROM members
-                                        WHERE username=$2)
-                        OR ChatId=$1
+                                        WHERE username=$2))
+                        OR (ChatId=$1
                         AND memberID=(SELECT memberid
                                         FROM members
                                         WHERE username=$2))`
