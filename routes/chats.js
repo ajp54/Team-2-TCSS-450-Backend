@@ -128,8 +128,8 @@ router.put("/:chatId?/", (request, response, next) => {
         //code here based on the results of the query
 }, (request, response, next) => {
     //validate email exists 
-    let query = `SELECT * FROM Members WHERE (Username=$1
-                                        OR email=$1)`
+    let query = `SELECT * FROM Members WHERE (Username=$1)
+                                        OR (email=$1)`
     let values = [request.body.username]
 
     pool.query(query, values)
