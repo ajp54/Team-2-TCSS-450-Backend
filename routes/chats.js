@@ -98,7 +98,7 @@ router.put("/:chatId?/", (request, response, next) => {
         response.status(400).send({
             message: "Malformed parameter. chatId must be a number"
         })
-    } else if (!request.body.usernames) {
+    } else if (!request.body.username) {
         response.status(400).send({
             message: "Missing required information"
         })
