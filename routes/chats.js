@@ -98,6 +98,10 @@ router.put("/:chatId?/", (request, response, next) => {
         response.status(400).send({
             message: "Malformed parameter. chatId must be a number"
         })
+    } else if (!request.body.usernames) {
+        response.status(400).send({
+            message: "Missing required information"
+        })
     } else {
         next()
     }
@@ -124,8 +128,8 @@ router.put("/:chatId?/", (request, response, next) => {
         //code here based on the results of the query
 }, (request, response, next) => {
     //validate email exists 
-    let query = 'SELECT * FROM Members WHERE MemberId=$1'
-    let values = [request.decoded.memberid]
+    let query = 'SELECT * FROM Members WHERE Username=$1'
+    let values = [request.body.username]
 
     pool.query(query, values)
         .then(result => {
@@ -145,8 +149,14 @@ router.put("/:chatId?/", (request, response, next) => {
         })
 }, (request, response, next) => {
         //validate email does not already exist in the chat
-        let query = 'SELECT * FROM ChatMembers WHERE ChatId=$1 AND MemberId=$2'
-        let values = [request.params.chatId, request.decoded.memberid]
+        let query = `SELECT * FROM ChatMembers WHERE ChatId=$1 AND ((SELECT memberid
+                                                                    FROM members
+                                                                    WHERE username=$2)
+                                                                    OR
+                                                                    (SELECT memberid
+                                                                    FROM members
+                                                                    WHERE email=$2))`
+        let values = [request.params.chatId, request.body.username]
     
         pool.query(query, values)
             .then(result => {
@@ -167,9 +177,15 @@ router.put("/:chatId?/", (request, response, next) => {
 }, (request, response) => {
     //Insert the memberId into the chat
     let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
-                  VALUES ($1, $2)
-                  RETURNING *`
-    let values = [request.params.chatId, request.decoded.memberid]
+                    VALUES ($1, ((SELECT memberid
+                                FROM members
+                                WHERE username=$2)
+                                OR
+                                (SELECT memberid
+                                FROM members
+                                WHERE email=$2))
+                    RETURNING *`
+    let values = [request.params.chatId, request.body.username]
     pool.query(insert, values)
         .then(result => {
             response.send({
