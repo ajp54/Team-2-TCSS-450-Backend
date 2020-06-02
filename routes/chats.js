@@ -149,15 +149,20 @@ router.put("/:chatId?/", (request, response, next) => {
         })
 }, (request, response, next) => {
         //validate email does not already exist in the chat
+        // let query = `SELECT * FROM ChatMembers 
+        //                 WHERE (ChatId=$1
+        //                 AND memberID=(SELECT memberid
+        //                                 FROM members
+        //                                 WHERE username=$2))
+        //                 OR (ChatId=$1
+        //                 AND memberID=(SELECT memberid
+        //                                 FROM members
+        //                                 WHERE username=$2))`
         let query = `SELECT * FROM ChatMembers 
-                        WHERE (ChatId=$1
+                        WHERE ChatId=$1
                         AND memberID=(SELECT memberid
                                         FROM members
-                                        WHERE username=$2))
-                        OR (ChatId=$1
-                        AND memberID=(SELECT memberid
-                                        FROM members
-                                        WHERE username=$2))`
+                                        WHERE username=$2)`
         let values = [request.params.chatId, request.body.username]
     
         pool.query(query, values)
@@ -178,14 +183,21 @@ router.put("/:chatId?/", (request, response, next) => {
 
 }, (request, response) => {
     //Insert the memberId into the chat
+    // let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
+    //                 VALUES ($1, ((SELECT memberid
+    //                             FROM members
+    //                             WHERE username=$2)
+    //                             OR
+    //                             (SELECT memberid
+    //                             FROM members
+    //                             WHERE email=$2))
+    //                 RETURNING *`
+
     let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
-                    VALUES ($1, ((SELECT memberid
+                    VALUES ($1, (SELECT memberid
                                 FROM members
-                                WHERE username=$2)
-                                OR
-                                (SELECT memberid
-                                FROM members
-                                WHERE email=$2))
+                                WHERE username=$2))
+                                
                     RETURNING *`
     let values = [request.params.chatId, request.body.username]
     pool.query(insert, values)
