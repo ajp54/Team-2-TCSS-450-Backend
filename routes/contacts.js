@@ -205,7 +205,7 @@ router.post("/", (request, response, next) => {
  */ 
 router.delete("/", (request, response, next) => {
   //validate that there are no empty parameters
-  if(request.params.username == null) {
+  if(request.query.username == null) {
     response.status(400).send({
       message: "Missing required username to remove from contacts"
     })
@@ -219,7 +219,7 @@ router.delete("/", (request, response, next) => {
 }, (request, response, next) => {
   //validate that username exists in MEMBERS
   let query = 'SELECT * FROM MEMBERS WHERE username=$1'
-  let values = [request.params.username]
+  let values = [request.query.username]
 
   pool.query(query, values)
       .then(result => {
@@ -252,7 +252,7 @@ router.delete("/", (request, response, next) => {
                 AND memberID_A=(SELECT memberid
                                 FROM members
                                 WHERE username=$2))`
-  let values = [user.email, request.params.username]
+  let values = [user.email, request.query.username]
 
   pool.query(query, values)
       .then(result => {
@@ -282,7 +282,7 @@ router.delete("/", (request, response, next) => {
                   (SELECT memberid
                     FROM members
                     WHERE username=$2)`
-  let values = [user.memberid, request.params.username]
+  let values = [user.memberid, request.query.username]
   pool.query(theQuery, values)
           .then(result => {
               //We successfully update the user, let the user know
