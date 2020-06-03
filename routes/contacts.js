@@ -31,21 +31,27 @@ router.get("/", (request, response, next) => {
       response.status(400).send({
         message: "Missing required information"
      })
+    } else if(request.query.pending == null) {
+      response.status(400).send({
+        message: "Missing required pending value"
+     })
     } else {
       next()
     }
 }, (request, response) => {
     let user = request.decoded
-    let theQuery = `SELECT username, firstName, lastName
+    let pending = request.query.pending
+    if(pending == "true") {
+      let theQuery = `SELECT username
                     FROM members
                     INNER JOIN contacts ON (members.memberid=contacts.memberid_B
                     OR members.memberid=contacts.memberid_A)
-                    WHERE verified=1
+                    WHERE verified=0
                     AND memberid!=$1
                     AND (memberid_A=$1
                     OR memberid_B=$1)`
-    let values = [user.memberid]
-    pool.query(theQuery, values)
+      let values = [user.memberid]
+      pool.query(theQuery, values)
             .then(result => {
                 //We successfully update the user, let the user know
                 response.send({
@@ -61,6 +67,34 @@ router.get("/", (request, response, next) => {
                   error: err
               })
             })
+    } else {
+      let theQuery = `SELECT username, firstName, lastName
+                    FROM members
+                    INNER JOIN contacts ON (members.memberid=contacts.memberid_B
+                    OR members.memberid=contacts.memberid_A)
+                    WHERE verified=1
+                    AND memberid!=$1
+                    AND (memberid_A=$1
+                    OR memberid_B=$1)`
+      let values = [user.memberid]
+      pool.query(theQuery, values)
+            .then(result => {
+                //We successfully update the user, let the user know
+                response.send({
+                  //message: "here"
+                  rows: result.rows
+                })
+            })
+            .catch((err) => {
+                //log the error
+                //console.log(err)
+              response.status(400).send({
+                  message: "400 error: SQL error on getting contacts",
+                  error: err
+              })
+            })
+    }
+    
       
 });
 
