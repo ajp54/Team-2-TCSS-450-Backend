@@ -1278,6 +1278,24 @@ define({ "api": [
             "field": "message",
             "description": "<p>the reported SQL error details</p>"
           }
+        ],
+        "400: Missing required information": [
+          {
+            "group": "400: Missing required information",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Missing required jwt token and information</p>"
+          }
+        ],
+        "400: Missing required pending value": [
+          {
+            "group": "400: Missing pending value",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Missing pending value</p>"
+          }
         ]
       }
     },

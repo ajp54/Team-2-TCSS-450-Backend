@@ -22,6 +22,10 @@ router.use(require("body-parser").json())
  * 
  * @apiSuccess {Object[]} username List of usernames the user has in contacts
  * 
+ * @apiError (400: Missing Parameters) {String} message "Missing required information"
+ * 
+ * @apiError (400: Missing Pending) {String} message "Missing required pending value"
+ * 
  * @apiError (400: SQL Error) {String} message the reported SQL error details
  * 
  * @apiUse JSONError
