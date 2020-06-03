@@ -98,6 +98,10 @@ router.put("/:chatId?/", (request, response, next) => {
         response.status(400).send({
             message: "Malformed parameter. chatId must be a number"
         })
+    } else if (!request.body.username) {
+        response.status(400).send({
+            message: "Missing required information"
+        })
     } else {
         next()
     }
@@ -124,14 +128,15 @@ router.put("/:chatId?/", (request, response, next) => {
         //code here based on the results of the query
 }, (request, response, next) => {
     //validate email exists 
-    let query = 'SELECT * FROM Members WHERE MemberId=$1'
-    let values = [request.decoded.memberid]
+    let query = `SELECT * FROM Members WHERE (Username=$1
+                                        OR email=$1)`
+    let values = [request.body.username]
 
     pool.query(query, values)
         .then(result => {
             if (result.rowCount == 0) {
                 response.status(404).send({
-                    message: "email not found"
+                    message: "username not found"
                 })
             } else {
                 //user found
@@ -145,8 +150,25 @@ router.put("/:chatId?/", (request, response, next) => {
         })
 }, (request, response, next) => {
         //validate email does not already exist in the chat
-        let query = 'SELECT * FROM ChatMembers WHERE ChatId=$1 AND MemberId=$2'
-        let values = [request.params.chatId, request.decoded.memberid]
+        // let query = `SELECT * FROM ChatMembers 
+        //                 WHERE (ChatId=$1
+        //                 AND memberID=(SELECT memberid
+        //                                 FROM members
+        //                                 WHERE username=$2))
+        //                 OR (ChatId=$1
+        //                 AND memberID=(SELECT memberid
+        //                                 FROM members
+        //                                 WHERE username=$2))`
+        let query = `SELECT * FROM ChatMembers 
+                        WHERE (ChatId=$1
+                        AND memberID=(SELECT memberid
+                                        FROM members
+                                        WHERE username=$2)
+                        OR ChatId=$1
+                        AND memberID=(SELECT memberid
+                                        FROM members
+                                        WHERE username=$2))`
+        let values = [request.params.chatId, request.body.username]
     
         pool.query(query, values)
             .then(result => {
@@ -166,10 +188,24 @@ router.put("/:chatId?/", (request, response, next) => {
 
 }, (request, response) => {
     //Insert the memberId into the chat
+    // let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
+    //                 VALUES ($1, ((SELECT memberid
+    //                             FROM members
+    //                             WHERE username=$2)
+    //                             OR
+    //                             (SELECT memberid
+    //                             FROM members
+    //                             WHERE email=$2))
+    //                 RETURNING *`
+
     let insert = `INSERT INTO ChatMembers(ChatId, MemberId)
-                  VALUES ($1, $2)
-                  RETURNING *`
-    let values = [request.params.chatId, request.decoded.memberid]
+                    VALUES ($1, (SELECT memberid
+                                FROM members
+                                WHERE (username=$2
+                                    OR
+                                    email=$2)))
+                            RETURNING *`
+    let values = [request.params.chatId, request.body.username]
     pool.query(insert, values)
         .then(result => {
             response.send({
@@ -195,7 +231,7 @@ router.put("/:chatId?/", (request, response, next) => {
  * 
  * @apiSuccess {Number} rowCount the number of messages returned
  * @apiSuccess {Object[]} members List of members in the chat
- * @apiSuccess {String} messages.email The email for the member in the chat
+ * @apiSuccess {String} chatId The chatId of the current chat
  * 
  * @apiError (404: ChatId Not Found) {String} message "Chat ID Not Found"
  * @apiError (400: Invalid Parameter) {String} message "Malformed parameter. chatId must be a number" 
@@ -249,7 +285,8 @@ router.get("/:chatId?", (request, response, next) => {
             .then(result => {
                 response.send({
                     rowCount : result.rowCount,
-                    rows: result.rows
+                    chatId : request.params.chatId,
+                    rows : result.rows
                 })
             }).catch(err => {
                 response.status(400).send({
