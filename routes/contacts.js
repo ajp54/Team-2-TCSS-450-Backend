@@ -52,8 +52,7 @@ router.get("/", (request, response, next) => {
                     OR members.memberid=contacts.memberid_A)
                     WHERE verified=0
                     AND memberid!=$1
-                    AND (memberid_A=$1
-                    OR memberid_B=$1)`
+                    AND memberid_B=$1`
       let values = [user.memberid]
       pool.query(theQuery, values)
             .then(result => {
