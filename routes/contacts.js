@@ -307,7 +307,7 @@ router.delete("/", (request, response, next) => {
           error: error
         })
       })
-}, (request, response) => {
+}, (request, response, next) => {
   let user = request.decoded
   let theQuery = `DELETE FROM Contacts
                   WHERE memberID_A=$1
@@ -323,10 +323,13 @@ router.delete("/", (request, response, next) => {
   let values = [user.memberid, request.query.username]
   pool.query(theQuery, values)
           .then(result => {
-              //We successfully update the user, let the user know
-              response.send({
-                  message: "Successfully deleted from contacts."
+            if(result.rowCount == 0) {
+              response.status(404).send({
+                message: "deleted user as a contact"
               })
+            } else {
+              next()
+            }
           })
           .catch((err) => {
               //log the error
@@ -336,6 +339,26 @@ router.delete("/", (request, response, next) => {
                 error: err
             })
           })
+}, (request, response) => {
+              let theQuery = `SELECT username
+                              FROM members
+                              WHERE username=$1`
+              let values = [request.query.username]
+              pool.query(theQuery, values)
+                      .then(result => {
+                          //We successfully update the user, let the user know
+                          response.send({
+                              rows: result.rows
+                          })
+                      })
+                      .catch((err) => {
+                          //log the error
+                          //console.log(err)
+                        response.status(400).send({
+                            message: "SQL Error on delete",
+                            error: err
+                        })
+                      })
 });
 
 /**
@@ -425,7 +448,7 @@ router.put("/", (request, response, next) => {
           error: error
         })
       })
-},(request, response) => {
+},(request, response, next) => {
     //update users verified contact status
       let user = request.decoded
       let theQuery = `UPDATE CONTACTS
@@ -444,9 +467,13 @@ router.put("/", (request, response, next) => {
       pool.query(theQuery, values)
               .then(result => {
                   //We successfully update the user, let the user know
-                  response.send({
-                      message: "Successfully updated contact."
-                  })
+                  if(result.rowCount == 0) {
+                    response.status(404).send({
+                      message: "deleted user as a contact"
+                    })
+                  } else {
+                    next()
+                  }
               })
               .catch((err) => {
                   //log the error
@@ -456,6 +483,26 @@ router.put("/", (request, response, next) => {
                     error: err
                 })
               })
+}, (request, response) => {
+              let theQuery = `SELECT username
+                              FROM members
+                              WHERE username=$1`
+              let values = [request.body.username]
+              pool.query(theQuery, values)
+                      .then(result => {
+                          //We successfully update the user, let the user know
+                          response.send({
+                              rows: result.rows
+                          })
+                      })
+                      .catch((err) => {
+                          //log the error
+                          //console.log(err)
+                        response.status(400).send({
+                            message: "SQL Error on delete",
+                            error: err
+                        })
+                      })
   });
 
 module.exports = router
