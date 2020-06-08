@@ -202,12 +202,15 @@ router.post("/", (request, response, next) => {
       let values = [user.email, request.body.username, 0]
       pool.query(theQuery, values)
               .then(result => {
-                  //We successfully update the user, let the user know
-                  response.send({
-                      message: "Successfully added to contacts."
+                if(result.rowCount > 0) {
+                  response.status(400).send({
+                    message: "Username is already a contact"
                   })
-              })
-              .catch((err) => {
+                } else {
+                  next()
+                }
+
+              }).catch((err) => {
                   //log the error
                   //console.log(err)
                 response.status(400).send({
