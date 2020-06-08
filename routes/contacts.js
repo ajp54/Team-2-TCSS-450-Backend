@@ -202,7 +202,7 @@ router.post("/", (request, response, next) => {
       let values = [user.email, request.body.username, 0]
       pool.query(theQuery, values)
               .then(result => {
-                if(result.rowCount > 0) {
+                if(result.rowCount == 0) {
                   response.status(400).send({
                     message: "Username is already a contact"
                   })
