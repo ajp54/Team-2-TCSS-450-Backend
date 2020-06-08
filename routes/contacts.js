@@ -203,10 +203,9 @@ router.post("/", (request, response, next) => {
       pool.query(theQuery, values)
               .then(result => {
                 if(result.rowCount > 0) {
-                  response.send(result.rowCount);
-                  // response.status(400).send({
-                  //   message: "Username is already in contacts"
-                  // })
+                  response.status(400).send({
+                    message: "Username is already in contacts"
+                  })
                 } else {
                   next()
                 }
