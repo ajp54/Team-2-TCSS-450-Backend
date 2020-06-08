@@ -188,7 +188,7 @@ router.post("/", (request, response, next) => {
           error: error
         })
       })
-},(request, response) => {
+},(request, response, next) => {
     //insert username into users contacts
       let user = request.decoded
       let theQuery = `INSERT INTO Contacts(memberID_A, memberID_B, verified)
@@ -215,6 +215,26 @@ router.post("/", (request, response, next) => {
                     error: err
                 })
               })
+}, (request, response) => {
+              let theQuery = `SELECT username, firstname, lastname
+                              FROM members
+                              WHERE username=$1`
+              let values = [request.body.username]
+              pool.query(theQuery, values)
+                      .then(result => {
+                          //We successfully add the user
+                          response.send({
+                              rows: result.rows
+                          })
+                      })
+                      .catch((err) => {
+                          //log the error
+                          //console.log(err)
+                        response.status(400).send({
+                            message: "SQL Error on delete",
+                            error: err
+                        })
+                      })
   });
 
 /**
